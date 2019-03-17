@@ -9,7 +9,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -21,9 +20,11 @@ public class MainActivity extends AppCompatActivity
 
     protected DrawerLayout drawer;
 
+    //Initialize the starting state of the Main Page
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity
         goToSettingsPage();
     }
 
+    //Close the side menu when a menu item is selected
     @Override
     public void onBackPressed() {
         drawer = findViewById(R.id.drawer_layout);
@@ -52,32 +54,9 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
+    //To be coded.....contains possible responses when menu item is selected
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.color_scheme) {
@@ -85,18 +64,22 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.about_app) {
 
         }
-
         drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
+    //Change the lightbulb image depending on the state of the switch button
     private void lightBulbPowerSwitch() {
+        //create Switch object and associate the switch button on the main page with it
         Switch powerSwitch = findViewById(R.id.powerSwitch);
+        //check the state of the Switch button
         powerSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                //create an ImageView object and associate the light bulb picture on main page with it
                 ImageView bulbImage = findViewById(R.id.bulbPicture);
+                //if switch button is in the "on" state, show the yellow light bulb and gray light bulb otherwise
                 if(isChecked) {
                     bulbImage.setImageResource(R.drawable.onlightbulb);
                 } else {
@@ -106,8 +89,11 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    //Go to Device Settings Page
     private void goToSettingsPage() {
+        //create Button object and associate the setting button on the main page with it
         Button settingButton = findViewById(R.id.settingButton);
+        //if the button is clicked, then go to the Device Settings page, the new activity(page)
         settingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
