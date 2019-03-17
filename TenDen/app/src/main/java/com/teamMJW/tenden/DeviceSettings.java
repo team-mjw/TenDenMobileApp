@@ -60,6 +60,8 @@ public class DeviceSettings extends AppCompatActivity
 
         } else if (id == R.id.about_app) {
 
+        } else if (id == R.id.current_devices) {
+
         }
 
         drawer = findViewById(R.id.drawer_layout);
