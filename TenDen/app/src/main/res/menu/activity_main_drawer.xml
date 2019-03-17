@@ -6,13 +6,19 @@
     <item android:title="App Settings">
         <menu>
             <item
-                android:id="@+id/color_scheme"
-                android:icon="@drawable/color_scheme_icon"
-                android:title="Color Scheme" />
-            <item
                 android:id="@+id/about_app"
                 android:icon="@drawable/info_icon"
                 android:title="About" />
+
+            <item
+                android:id="@+id/color_scheme"
+                android:icon="@drawable/color_scheme_icon"
+                android:title="Color Scheme" />
+
+            <item
+                android:id="@+id/current_devices"
+                android:icon="@drawable/ic_list"
+                android:title="Current Devices" />
         </menu>
     </item>
 
