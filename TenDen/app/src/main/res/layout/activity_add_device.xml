@@ -17,7 +17,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
-        android:background="@color/switchButtonColor"
+        android:background="@drawable/roundbutton_primary"
         android:padding="10dp"
         android:text="Cancel"
         android:textAppearance="@style/TextAppearance.AppCompat"
