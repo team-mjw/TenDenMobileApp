@@ -1,7 +1,9 @@
 package com.teamMJW.tenden;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,6 +17,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.PopupWindow;
 import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class DeviceSettings extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -39,7 +52,7 @@ public class DeviceSettings extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         goBackToMainPage();
-
+        goToEditMode();
     }
 
     //Close the side menu when a menu item is selected
@@ -105,4 +118,31 @@ public class DeviceSettings extends AppCompatActivity
             }
         });
     }
+
+    //Code to go to EditMode Page
+    private void goToEditMode() {
+            //create Button object and associate the setting button on the main page with it
+            Button addModeButton = (Button) findViewById(R.id.addModeButton);
+            //if the button is clicked, then go to the Device Settings page, the new activity(page)
+            addModeButton.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    //Passing the mode details
+                    Intent mode = new Intent(getApplicationContext(), EditMode.class);
+                    mode.putExtra("modeName", "ModeOne");
+                    startActivity(mode);
+                }
+            });
+    };
+
+    private void getModes() {
+        Resources r = getResources();
+        int id = r.getIdentifier("modes", "raw", this.getPackageName());
+        InputStream input = r.openRawResource(id);
+
+
+    }
+
+
 }
