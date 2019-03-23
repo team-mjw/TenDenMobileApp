@@ -7,4 +7,7 @@
     <color name="switchButtonColor">#0f52ba</color>
     <color name="accentColor">#0000FF</color>
     <color name="saveButtonColor">#47E434</color>
+    <color name="powerOnColor">#65bb64</color>
+    <color name="powerOffColor">#d9534f</color>
+    <color name="white">#FFFFFF</color>
 </resources>
