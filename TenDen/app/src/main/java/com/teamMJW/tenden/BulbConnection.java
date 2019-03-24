@@ -22,11 +22,11 @@ public class BulbConnection implements Runnable {
 
     private String currentColorTemperature;
 
-    private String powerButtonStatus;
+    private String requestFunc;
 
     //constructor --> might need to add additional parameters
-    public BulbConnection(String powerButtonStatus) {
-        this.powerButtonStatus = powerButtonStatus;
+    public BulbConnection(String requestFunc) {
+        this.requestFunc = requestFunc;
     }
 
     //function that will be called when BulbConnection object is called
@@ -136,10 +136,14 @@ public class BulbConnection implements Runnable {
             DataOutputStream out = new DataOutputStream(tcpSocket.getOutputStream());
 
             //Turn on the bulb if switch button is in the "Power On" position and turn off if otherwise
-            if(powerButtonStatus.equals("Power On")) {
+            if(requestFunc.equals("Power On")) {
                 out.writeBytes("{\"id\": 1, \"method\": \"set_power\", \"params\":[\"on\", \"smooth\", 500]}\r\n");
-            } else {
+            } else if (requestFunc.equals("Power Off")) {
                 out.writeBytes("{\"id\": 1, \"method\": \"set_power\", \"params\":[\"off\", \"smooth\", 500]}\r\n");
+            } else if (requestFunc.equals("Alert On")) {
+                out.writeBytes("{\"id\":1,\"method\":\"start_cf\",\"params\":[5, 0, \"500, 2, 2700, 100, 500, 2, 4000, 25, 500, 2, 1500, 100, 500, 2, 4000, 25, 500, 2, 2700, 100\"]}\r\n");
+            } else if (requestFunc.equals("Alert Off")) {
+
             }
 
             tcpSocket.close();
