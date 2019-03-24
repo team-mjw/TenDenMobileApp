@@ -20,7 +20,9 @@ public class DeviceSettings extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     protected DrawerLayout drawer;
+    //
     TextView txt_help_gest;
+    TextView txt_help_gest2;
 
     //Initialize the starting state of the Device Settings Page
     @Override
@@ -32,8 +34,10 @@ public class DeviceSettings extends AppCompatActivity
 
         //for expandable ListView
         txt_help_gest = (TextView) findViewById(R.id.txt_help_gest);
+        txt_help_gest2 = (TextView) findViewById(R.id.txt_help_gest2);
         // hide until its title is clicked
         txt_help_gest.setVisibility(View.GONE);
+        txt_help_gest2.setVisibility(View.GONE);
 
         drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -52,8 +56,14 @@ public class DeviceSettings extends AppCompatActivity
     /**
      * onClick handler
      */
-    public void toggle_contents(View v){
+    public void toggle_contents1(View v){
         txt_help_gest.setVisibility( txt_help_gest.isShown()
+                ? View.GONE
+                : View.VISIBLE );
+    }
+
+    public void toggle_contents2(View v){
+        txt_help_gest2.setVisibility( txt_help_gest2.isShown()
                 ? View.GONE
                 : View.VISIBLE );
     }

@@ -10,6 +10,68 @@
     tools:context=".DeviceSettings">
 
 
+
+    <TextView
+        android:id="@+id/help_title_gest"
+        android:layout_width="274dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginLeft="68dp"
+        android:layout_marginTop="104dp"
+        android:background="@color/white"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="toggle_contents1"
+        android:text="Cloudy"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+
+        <TextView
+            android:id="@+id/txt_help_gest"
+            android:layout_width="274dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="68dp"
+            android:layout_marginLeft="68dp"
+            android:layout_marginTop="144dp"
+            android:background="@color/white"
+            android:text="Attributes"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+
+
+
+    <TextView
+        android:id="@+id/help_title_gest2"
+        android:layout_width="274dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginLeft="68dp"
+        android:layout_marginTop="212dp"
+        android:background="@color/white"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="toggle_contents2"
+        android:text="Sunny"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txt_help_gest2"
+        android:layout_width="275dp"
+        android:layout_height="67dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginLeft="68dp"
+        android:layout_marginTop="264dp"
+        android:background="@color/white"
+        android:text="Attributes"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
     <Button
         android:id="@+id/backMainPage"
         android:layout_width="wrap_content"
@@ -33,5 +95,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.961" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="44dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="104dp"
+        android:layout_marginEnd="80dp"
+        android:layout_marginRight="80dp"
+        android:clickable="true"
+        android:onClick="toggle_contents1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/arrow_down_float" />
+
 
 </android.support.constraint.ConstraintLayout>
