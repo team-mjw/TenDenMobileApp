@@ -1,5 +1,6 @@
 package com.teamMJW.tenden;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,13 +13,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
-import android.app.AlertDialog;
 
 public class DeviceSettings extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     protected DrawerLayout drawer;
+    TextView txt_help_gest;
 
     //Initialize the starting state of the Device Settings Page
     @Override
@@ -27,6 +29,11 @@ public class DeviceSettings extends AppCompatActivity
         setContentView(R.layout.activity_device_settings);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //for expandable ListView
+        txt_help_gest = (TextView) findViewById(R.id.txt_help_gest);
+        // hide until its title is clicked
+        txt_help_gest.setVisibility(View.GONE);
 
         drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -40,6 +47,15 @@ public class DeviceSettings extends AppCompatActivity
 
         goBackToMainPage();
 
+    }
+
+    /**
+     * onClick handler
+     */
+    public void toggle_contents(View v){
+        txt_help_gest.setVisibility( txt_help_gest.isShown()
+                ? View.GONE
+                : View.VISIBLE );
     }
 
     //Close the side menu when a menu item is selected

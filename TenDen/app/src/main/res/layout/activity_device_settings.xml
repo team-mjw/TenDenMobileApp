@@ -21,6 +21,36 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_main_drawer" />
+        app:menu="@menu/activity_main_drawer" >
+
+    </android.support.design.widget.NavigationView>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <!-- activity_info layout file -->
+        <!-- Clickable title -->
+
+        <TextView
+            android:id="@+id/help_title_gest"
+            android:layout_width="204dp"
+            android:layout_height="43dp"
+            android:clickable="true"
+            android:onClick="toggle_contents"
+            android:text="Cloudy"
+            android:focusable="true" />
+
+        <TextView
+            android:id="@+id/txt_help_gest"
+            android:layout_width="204dp"
+            android:layout_height="43dp"
+            android:text="Attributes" />
+
+
+        <!--content to hide/show -->
+
+    </LinearLayout>
 
 </android.support.v4.widget.DrawerLayout>

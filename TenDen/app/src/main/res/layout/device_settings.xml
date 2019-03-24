@@ -9,6 +9,7 @@
     android:visibility="visible"
     tools:context=".DeviceSettings">
 
+
     <Button
         android:id="@+id/backMainPage"
         android:layout_width="wrap_content"
