@@ -23,8 +23,6 @@ public class AlertSettings extends AppCompatActivity {
 
         weatherAlertSwitch();
 
-        goBackToPreviousPage();
-
     }
 
     //Change the lightbulb image depending on the state of the switch button
@@ -84,17 +82,6 @@ public class AlertSettings extends AppCompatActivity {
 
                 }
 
-            }
-        });
-    }
-
-    //For testing purposes......Go back to the Main Page when "Back" button is clicked
-    private void goBackToPreviousPage() {
-        Button mainPageButton = findViewById(R.id.backDeviceSettingsPage);
-        mainPageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
             }
         });
     }
