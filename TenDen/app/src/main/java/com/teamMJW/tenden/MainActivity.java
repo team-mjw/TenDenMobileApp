@@ -115,6 +115,9 @@ public class MainActivity extends AppCompatActivity
                     powerOnToast.show();
                     bulbImage.setImageResource(R.drawable.onlightbulb);
 
+                    new Thread(new BulbConnection(toastText)).start();
+
+
                 } else {
                     toastText = powerSwitch.getTextOff().toString();
 
@@ -135,6 +138,9 @@ public class MainActivity extends AppCompatActivity
                     //show the toast and change light bulb image
                     powerOffToast.show();
                     bulbImage.setImageResource(R.drawable.offlightbulb);
+
+                    new Thread(new BulbConnection(toastText)).start();
+
                 }
 
             }
