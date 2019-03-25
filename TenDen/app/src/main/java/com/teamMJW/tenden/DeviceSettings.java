@@ -3,6 +3,7 @@ package com.teamMJW.tenden;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,6 +17,9 @@ import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.app.AlertDialog;
+
+import java.io.InputStream;
 
 public class DeviceSettings extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -63,7 +67,7 @@ public class DeviceSettings extends AppCompatActivity
         navigationView.setItemIconTintList(null);
 
         goBackToMainPage();
-
+        goToEditMode();
     }
 
     /**
@@ -170,4 +174,31 @@ public class DeviceSettings extends AppCompatActivity
         //show the alert dialog
         builder.show();
     }
+
+    //Code to go to EditMode Page
+    private void goToEditMode() {
+            //create Button object and associate the setting button on the main page with it
+            Button addModeButton = (Button) findViewById(R.id.addModeButton);
+            //if the button is clicked, then go to the Device Settings page, the new activity(page)
+            addModeButton.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    //Passing the mode details
+                    Intent mode = new Intent(getApplicationContext(), EditMode.class);
+                    mode.putExtra("modeName", "ModeOne");
+                    startActivity(mode);
+                }
+            });
+    };
+
+    private void getModes() {
+        Resources r = getResources();
+        int id = r.getIdentifier("modes", "raw", this.getPackageName());
+        InputStream input = r.openRawResource(id);
+
+
+    }
+
+
 }
