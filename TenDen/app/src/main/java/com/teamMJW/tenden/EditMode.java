@@ -37,6 +37,7 @@ import javax.xml.parsers.SAXParserFactory;
 public class EditMode extends AppCompatActivity implements AsyncResponse {
 
     WeatherFeed feed = new WeatherFeed(this);
+    TempBulbChange bulb = new TempBulbChange();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,5 +93,41 @@ public class EditMode extends AppCompatActivity implements AsyncResponse {
     public void processFinish(String output) {
         EditText editName = (EditText) findViewById(R.id.modeName);
         editName.setText(output);
+        String temp = output.toLowerCase();
+        int number = Integer.parseInt(output.substring(0,2));
+        if(number > 80) {
+            System.out.println("above 80");
+            bulb.changeBulb(100, 6000);
+        }
+        else if(number > 60) {
+            System.out.println("above 60");
+            bulb.changeBulb(40, 4000);
+        }
+        else if(number > 40) {
+            System.out.println("above 40");
+            bulb.changeBulb(5, 2000);
+        }
+        else {
+            System.out.println("didn't work");
+        }
+//        if (temp.contains("rain")) {
+//            System.out.println("It was rainy");
+//            bulb.changeBulb(5, 2000);
+//        }
+//        else if (temp.contains("cloud") || temp.contains("overcast")) {
+//            System.out.println("It was cloudy/overcast");
+//            bulb.changeBulb(40, 4000);
+//        }
+//        else if (temp.contains("fair")) {
+//            System.out.println("It was fair");
+//            bulb.changeBulb(100, 6000);
+//        }
+//        else if (temp.contains("sun")) {
+//            System.out.println("It was sunny");
+//            bulb.changeBulb(80, 5000);
+//        }
+//        else {
+//            System.out.println("didn't work");
+//        }
     }
 }

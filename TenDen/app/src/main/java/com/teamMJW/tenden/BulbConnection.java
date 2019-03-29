@@ -44,7 +44,7 @@ public class BulbConnection implements Runnable {
             System.out.println("*****Searching for Device*****\n");
 
             //Convert HTTP request to byte array
-            byte [] httpRequest = initialRequestString.getBytes();
+            byte[] httpRequest = initialRequestString.getBytes();
             int httpRequestLength = initialRequestString.length();
 
             //Create a Socket for data transfer of HTTP Request and Response
@@ -116,7 +116,7 @@ public class BulbConnection implements Runnable {
             //turns the light on or off depending on the switch button status
             powerSwitchBulb(finalIpAddress);
 
-        }catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Error @ send");
 
@@ -136,7 +136,7 @@ public class BulbConnection implements Runnable {
             DataOutputStream out = new DataOutputStream(tcpSocket.getOutputStream());
 
             //Turn on the bulb if switch button is in the "Power On" position and turn off if otherwise
-            if(powerButtonStatus.equals("Power On")) {
+            if (powerButtonStatus.equals("Power On")) {
                 out.writeBytes("{\"id\": 1, \"method\": \"set_power\", \"params\":[\"on\", \"smooth\", 500]}\r\n");
             } else {
                 out.writeBytes("{\"id\": 1, \"method\": \"set_power\", \"params\":[\"off\", \"smooth\", 500]}\r\n");
@@ -150,5 +150,95 @@ public class BulbConnection implements Runnable {
 
     }
 
+    //There's probably a better name than changeBulb
+    public void changeBulb(int brightness, int temperature) {
+        try {
+            System.out.println("*****Searching for Device*****\n");
 
+            //Convert HTTP request to byte array
+            byte[] httpRequest = initialRequestString.getBytes();
+            int httpRequestLength = initialRequestString.length();
+
+            //Create a Socket for data transfer of HTTP Request and Response
+            DatagramSocket socket = new DatagramSocket();
+
+            //Change the IP address from a String to a InetAddress
+            InetAddress address = InetAddress.getByName("239.255.255.250");
+            //Port Number of HOST (239.255.255.250)
+            int portNumber = 1982;
+
+            //Container for the HTTP Response
+            byte[] receiveData = new byte[2048];
+
+            //Prepare the HTTP Request packet
+            DatagramPacket sendPacket = new DatagramPacket(httpRequest, httpRequestLength, address, portNumber);
+
+            //Send the HTTP request packet to the socket
+            socket.send(sendPacket);
+
+            //Setup the packet for the Response HTTP packet
+            DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+
+            //Store the data of the HTTP Response in the Response HTTP packet
+            socket.receive(receivePacket);
+
+            //Convert the Data in the Response Packet to String form for ip address extraction
+            String responseString = new String(receivePacket.getData());
+
+            //temporary variables to extract various information of the light bulb
+            String ipAddressString = responseString;
+            String idString = responseString;
+            String powerStatusString = responseString;
+            String brightnessString = responseString;
+            String colorTemperatureString = responseString;
+
+            //Close the socket connection
+            socket.close();
+
+            //Obtain the IP address from HTTP Response Packet
+            ipAddressString = ipAddressString.substring(ipAddressString.lastIndexOf("//") + 2);
+            ipAddressString = ipAddressString.substring(0, ipAddressString.indexOf("\n"));
+            ipAddressString = ipAddressString.substring(0, ipAddressString.indexOf(":"));
+
+            //Extract unique bulb id
+            idString = idString.substring(idString.indexOf("id:"));
+            idString = idString.substring(0, idString.indexOf("\n"));
+            bulbId = idString.substring(idString.indexOf(": ") + 2);
+
+            //Extract current power status
+            powerStatusString = powerStatusString.substring(powerStatusString.indexOf("power:"));
+            powerStatusString = powerStatusString.substring(0, powerStatusString.indexOf("\n"));
+            currentPowerStatus = powerStatusString.substring(powerStatusString.indexOf(": ") + 2);
+
+            //Extract current brightness value
+            brightnessString = brightnessString.substring(brightnessString.indexOf("bright:"));
+            brightnessString = brightnessString.substring(0, brightnessString.indexOf("\n"));
+            currentBrightness = brightnessString.substring(brightnessString.indexOf(": ") + 2);
+
+            //Extract current color temperature
+            colorTemperatureString = colorTemperatureString.substring(colorTemperatureString.indexOf("ct:"));
+            colorTemperatureString = colorTemperatureString.substring(0, colorTemperatureString.indexOf("\n"));
+            currentColorTemperature = colorTemperatureString.substring(colorTemperatureString.indexOf(": ") + 2);
+
+            //Convert string ip address to InetAddress form
+            finalIpAddress = InetAddress.getByName(ipAddressString);
+
+            System.out.println("*****Device Discovered*****\n");
+
+            //Create a tcp socket for data transfer
+            Socket tcpSocket = new Socket(finalIpAddress, 55443);
+
+            //Transfer the Data using the socket to the light bulb
+            DataOutputStream out = new DataOutputStream(tcpSocket.getOutputStream());
+
+            //Turn on the bulb if switch button is in the "Power On" position and turn off if otherwise
+                out.writeBytes("{\"id\":1,\"method\":\"adjust_bright\",\"params\":[" + brightness + ", 500]}\r\n");
+                out.writeBytes("{\"id\":1,\"method\":\"set_ct_abx\",\"params\":[" + temperature + ", \"smooth\", 500]}\r\n");
+
+            tcpSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error @ changeBulb function");
+        }
+    }
 }
