@@ -35,7 +35,7 @@ public class BulbConnection implements Runnable {
         bulbConnect();
     }
 
-
+    
     //Initial UDP Connection with the light by grabing bulb information in HTTP response packet
     //The following information is provided in the response packet:
     //1) unique id, 2) ip address, 3) power status, 4) brightness, and 5) color temperature
