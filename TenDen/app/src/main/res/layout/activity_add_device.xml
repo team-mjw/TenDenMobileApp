@@ -7,24 +7,6 @@
     android:background="@color/backgroundPrimaryColor"
     tools:context=".AddDevice">
 
-    <Button
-        android:id="@+id/backMainPage"
-        android:layout_width="95dp"
-        android:layout_height="59dp"
-        android:layout_marginStart="108dp"
-        android:layout_marginLeft="108dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:padding="10dp"
-        android:text="Cancel"
-        android:textAppearance="@style/TextAppearance.AppCompat"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scrollView2"
-        app:layout_constraintVertical_bias="0.08" />
-
     <TextView
         android:id="@+id/textView"
         android:layout_width="159dp"

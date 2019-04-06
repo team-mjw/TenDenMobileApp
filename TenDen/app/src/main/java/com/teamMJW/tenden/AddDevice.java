@@ -12,17 +12,6 @@ public class AddDevice extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_device);
 
-        goBackToPreviousPage();
     }
 
-    //For testing purposes......Go back to the Main Page when "Back" button is clicked
-    private void goBackToPreviousPage() {
-        Button mainPageButton = findViewById(R.id.backMainPage);
-        mainPageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-    }
 }
