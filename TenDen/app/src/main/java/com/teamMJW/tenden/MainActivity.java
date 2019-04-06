@@ -2,6 +2,7 @@ package com.teamMJW.tenden;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -49,6 +50,24 @@ public class MainActivity extends AppCompatActivity
 
         //Go to Settings Page
         goToSettingsPage();
+
+        new Thread(new AppStartSetup(MainActivity.this));
+
+        //extract value of the the "power" key
+        SharedPreferences s = getSharedPreferences("Startup_Data", 0);
+        String value = s.getString("power", "");
+
+        Switch powerButton = findViewById(R.id.powerSwitch);
+
+        //change the power switch button state depending on the power state of the bulb
+        if(value.compareTo("on") == 0) {
+            powerButton.setChecked(false);
+        } else {
+            powerButton.setChecked(true);
+        }
+
+        //remove the key-value pair from the temporary saved data
+        s.edit().remove("power").apply();
     }
 
     //Close the side menu when a menu item is selected
