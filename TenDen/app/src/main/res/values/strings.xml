@@ -8,4 +8,6 @@
     <string name="status">Status: &#032;</string>
     <string name="todo">TODO</string>
     <string name="title_activity_device_setting">DeviceSetting</string>
+    <string name="title_activity_edit_mode">EditMode</string>
+    <string name="alert_description">Weather Alerts include any weather watches, advisories, and warning that are occuring in in your area.</string>
 </resources>

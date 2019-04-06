@@ -1,7 +1,9 @@
 package com.teamMJW.tenden;
 
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -9,12 +11,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.PopupWindow;
 import android.widget.Toast;
+import android.app.AlertDialog;
+
+import java.io.InputStream;
 
 public class DeviceSettings extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -37,9 +41,10 @@ public class DeviceSettings extends AppCompatActivity
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setItemIconTintList(null);
 
         goBackToMainPage();
-
+        goToEditMode();
     }
 
     //Close the side menu when a menu item is selected
@@ -53,6 +58,25 @@ public class DeviceSettings extends AppCompatActivity
         }
     }
 
+    //specifically for the weather alert button
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.weather_alert_button) {
+            Intent mode = new Intent(DeviceSettings.this, AlertSettings.class);
+            startActivity(mode);
+        }
+
+        return true;
+    }
+
 
     //To be coded.....contains possible responses when menu item is selected
     @Override
@@ -60,12 +84,11 @@ public class DeviceSettings extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.color_scheme) {
+        if (id == R.id.about_app) {
+            displayAppInformation();
+        } else if (id == R.id.color_scheme) {
             Toast.makeText(this, "Color Scheme", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.about_app) {
-            Toast.makeText(this, "About", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.current_devices) {
-//            Toast.makeText(this, "Current Devices", Toast.LENGTH_SHORT).show();
             displayDeviceList();
         }
 
@@ -86,23 +109,65 @@ public class DeviceSettings extends AppCompatActivity
         });
     }
 
-    //Display the Device List popup (Currently no devices in the list -> March 17, 2019)
-    private void displayDeviceList() {
-        //Create and setup Popup window based on "device_list_pop" layout
-        PopupWindow popup = new PopupWindow(this);
-        View layout = getLayoutInflater().inflate(R.layout.device_list_popup, null);
-        popup.setContentView(layout);
-        popup.setOutsideTouchable(true);
-        popup.setFocusable(true);
-        popup.showAtLocation(layout, Gravity.CENTER, 0, 0);
+    //Display the TenDen App description
+    private void displayAppInformation() {
+        //create an alert dialog for device list
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        //set the title
+        builder.setTitle("TenDen");
+        //set the app description
+        builder.setMessage("A mobile app that controls a Yeelight light bulb based on gathered weather data.");
+        //show the alert dialog
+        builder.show();
+    }
 
-        //Create a handler when the add device button is pressed ->Response: Go to Add Device page
-        Button addDeviceButton = layout.findViewById(R.id.add_device_button);
-        addDeviceButton.setOnClickListener(new View.OnClickListener() {
+    //Display the Device List popup
+    private void displayDeviceList() {
+        //temporary strings in the device list
+        String[] devices = {"Device #1", "Device #2", "Device #3"};
+
+        //create an alert dialog for device list
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        //set the title
+        builder.setTitle("Current Registered Devices");
+        //set the contents of the devices
+        builder.setItems(devices, null);
+        //add a "Add Device" button, which will redirect to the AddDevice page
+        builder.setPositiveButton("Add Device", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                startActivity(new Intent(DeviceSettings.this, AddDevice.class));
+            public void onClick(DialogInterface dialog, int addDeviceButton) {
+                Intent goToAddDevicePage = new Intent(DeviceSettings.this, AddDevice.class);
+                startActivity(goToAddDevicePage);
             }
         });
+        //show the alert dialog
+        builder.show();
     }
+
+    //Code to go to EditMode Page
+    private void goToEditMode() {
+            //create Button object and associate the setting button on the main page with it
+            Button addModeButton = (Button) findViewById(R.id.addModeButton);
+            //if the button is clicked, then go to the Device Settings page, the new activity(page)
+            addModeButton.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    //Passing the mode details
+                    Intent mode = new Intent(getApplicationContext(), EditMode.class);
+                    mode.putExtra("modeName", "ModeOne");
+                    startActivity(mode);
+                }
+            });
+    };
+
+    private void getModes() {
+        Resources r = getResources();
+        int id = r.getIdentifier("modes", "raw", this.getPackageName());
+        InputStream input = r.openRawResource(id);
+
+
+    }
+
+
 }
