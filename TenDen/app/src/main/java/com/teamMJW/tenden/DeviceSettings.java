@@ -1,6 +1,6 @@
 package com.teamMJW.tenden;
 
-
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -15,6 +15,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.app.AlertDialog;
 
@@ -24,6 +26,13 @@ public class DeviceSettings extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     protected DrawerLayout drawer;
+    //
+    TextView txt_help_gest;
+    TextView txt_help_gest2;
+    Button button1;
+    Button button2;
+    ScrollView scrollview1;
+    ScrollView scrollview2;
 
     //Initialize the starting state of the Device Settings Page
     @Override
@@ -32,6 +41,21 @@ public class DeviceSettings extends AppCompatActivity
         setContentView(R.layout.activity_device_settings);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //for expandable ListView
+        txt_help_gest = (TextView) findViewById(R.id.txt_help_gest);
+        txt_help_gest2 = (TextView) findViewById(R.id.txt_help_gest2);
+        button1 = (Button) findViewById(R.id.button1);
+        button2 = (Button) findViewById(R.id.button2);
+        scrollview1 = (ScrollView) findViewById(R.id.scrollview1);
+        scrollview2 = (ScrollView) findViewById(R.id.scrollview2);
+        // hide until its title is clicked
+        txt_help_gest.setVisibility(View.GONE);
+        txt_help_gest2.setVisibility(View.GONE);
+        button1.setVisibility(Button.GONE);
+        button2.setVisibility(Button.GONE);
+        scrollview1.setVisibility(Button.GONE);
+        scrollview2.setVisibility(Button.GONE);
 
         drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -45,6 +69,33 @@ public class DeviceSettings extends AppCompatActivity
 
         goBackToMainPage();
         goToEditMode();
+    }
+
+    /**
+     * onClick handler
+     */
+    public void toggle_contents1(View v){
+        txt_help_gest.setVisibility( txt_help_gest.isShown()
+                ? View.GONE
+                : View.VISIBLE );
+        button1.setVisibility( button1.isShown()
+                ? Button.GONE
+                : Button.VISIBLE );
+        scrollview1.setVisibility( scrollview1.isShown()
+                ? Button.GONE
+                : Button.VISIBLE );
+    }
+
+    public void toggle_contents2(View v){
+        txt_help_gest2.setVisibility( txt_help_gest2.isShown()
+                ? View.GONE
+                : View.VISIBLE );
+        button2.setVisibility( button2.isShown()
+                ? Button.GONE
+                : Button.VISIBLE );
+        scrollview2.setVisibility( scrollview2.isShown()
+                ? Button.GONE
+                : Button.VISIBLE );
     }
 
     //Close the side menu when a menu item is selected
