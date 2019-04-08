@@ -34,6 +34,8 @@ public class MainActivity extends AppCompatActivity
 
     protected DrawerLayout drawer;
 
+    protected boolean emulatorMode = true;
+
     //Initialize the starting state of the Main Page
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -228,40 +230,51 @@ public class MainActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
+        if(emulatorMode) {
+            //get access to the switch button
+            Switch powerButton = findViewById(R.id.powerSwitch);
+            //get access to the TextView (Device Name)
+            TextView deviceName = findViewById(R.id.deviceName);
 
-        //get device id and power status data from SharedPreferences (stores primitive data)
-        SharedPreferences s = getSharedPreferences("APPDATA", Context.MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = s.getString("Bulb", null);
-        Device bulb = gson.fromJson(json, Device.class);
-        String powerState = bulb.getCurrentPowerStatus();
-        String id = bulb.getBulbId();
-
-        //get access to the switch button
-        Switch powerButton = findViewById(R.id.powerSwitch);
-        //get access to the TextView (Device Name)
-        TextView deviceName = findViewById(R.id.deviceName);
-
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!" + s.getAll());
-
-        //set the power switch button to correct position
-        if(powerState == null) {
             powerButton.setChecked(false);
-        } else {
-            //change the power switch button state depending on the power state of the bulb
-            if(powerState.compareTo("on") == 0) {
-                powerButton.setChecked(true);
-            } else {
-                powerButton.setChecked(false);
-            }
-        }
-
-        //set device name text on the main page
-        if(id == null) {
             deviceName.setText("Device Name");
+
         } else {
-            deviceName.setText(id);
-            deviceName.setTextSize(20);
+
+            //get device id and power status data from SharedPreferences (stores primitive data)
+            SharedPreferences s = getSharedPreferences("APPDATA", Context.MODE_PRIVATE);
+            Gson gson = new Gson();
+            String json = s.getString("Bulb", null);
+            Device bulb = gson.fromJson(json, Device.class);
+            String powerState = bulb.getCurrentPowerStatus();
+            String id = bulb.getBulbId();
+
+            //get access to the switch button
+            Switch powerButton = findViewById(R.id.powerSwitch);
+            //get access to the TextView (Device Name)
+            TextView deviceName = findViewById(R.id.deviceName);
+
+            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!" + s.getAll());
+
+            //set the power switch button to correct position
+            if (powerState == null) {
+                powerButton.setChecked(false);
+            } else {
+                //change the power switch button state depending on the power state of the bulb
+                if (powerState.compareTo("on") == 0) {
+                    powerButton.setChecked(true);
+                } else {
+                    powerButton.setChecked(false);
+                }
+            }
+
+            //set device name text on the main page
+            if (id == null) {
+                deviceName.setText("Device Name");
+            } else {
+                deviceName.setText(id);
+                deviceName.setTextSize(20);
+            }
         }
 
 

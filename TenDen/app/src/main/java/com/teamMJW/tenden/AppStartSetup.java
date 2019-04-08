@@ -32,6 +32,8 @@ public class AppStartSetup implements Runnable {
 
     private Context context;
 
+    protected boolean emulatorMode = true;
+
     public AppStartSetup(Activity context) {
         this.context = context;
     }
@@ -41,16 +43,20 @@ public class AppStartSetup implements Runnable {
     public void run() {
         bulbConnect();
 
-        Device myBulb = new Device(bulbId, currentPowerStatus, currentBrightness, currentColorTemperature, finalIpAddress);
+        if(emulatorMode) {
 
-        SharedPreferences p = context.getSharedPreferences("APPDATA", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = p.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(myBulb);
-        editor.putString("Bulb", json);
-        editor.apply();
+            Device myBulb = new Device(bulbId, currentPowerStatus, currentBrightness, currentColorTemperature, finalIpAddress);
 
-        System.out.println("----------------------------" + p.getAll());
+            SharedPreferences p = context.getSharedPreferences("APPDATA", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = p.edit();
+            Gson gson = new Gson();
+            String json = gson.toJson(myBulb);
+            editor.putString("Bulb", json);
+            editor.apply();
+
+            System.out.println("----------------------------" + p.getAll());
+
+        }
 
     }
 
