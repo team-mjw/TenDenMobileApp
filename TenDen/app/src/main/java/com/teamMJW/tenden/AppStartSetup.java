@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.widget.Switch;
 
+import com.google.gson.Gson;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -39,14 +41,16 @@ public class AppStartSetup implements Runnable {
     public void run() {
         bulbConnect();
 
-        SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(context);
+        Device myBulb = new Device(bulbId, currentPowerStatus, currentBrightness, currentColorTemperature, finalIpAddress);
+
+        SharedPreferences p = context.getSharedPreferences("APPDATA", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = p.edit();
-        editor.putString("power", currentPowerStatus);
+        Gson gson = new Gson();
+        String json = gson.toJson(myBulb);
+        editor.putString("Bulb", json);
         editor.apply();
 
-
         System.out.println("----------------------------" + p.getAll());
-
 
     }
 
@@ -107,6 +111,7 @@ public class AppStartSetup implements Runnable {
             idString = idString.substring(idString.indexOf("id:"));
             idString = idString.substring(0, idString.indexOf("\n"));
             bulbId = idString.substring(idString.indexOf(": ") + 2);
+            bulbId = bulbId.replaceAll("\\s+", "");
 
             //Extract current power status
             powerStatusString = powerStatusString.substring(powerStatusString.indexOf("power:"));
@@ -118,11 +123,13 @@ public class AppStartSetup implements Runnable {
             brightnessString = brightnessString.substring(brightnessString.indexOf("bright:"));
             brightnessString = brightnessString.substring(0, brightnessString.indexOf("\n"));
             currentBrightness = brightnessString.substring(brightnessString.indexOf(": ") + 2);
+            currentBrightness = currentBrightness.replaceAll("\\s+", "");
 
             //Extract current color temperature
             colorTemperatureString = colorTemperatureString.substring(colorTemperatureString.indexOf("ct:"));
             colorTemperatureString = colorTemperatureString.substring(0, colorTemperatureString.indexOf("\n"));
             currentColorTemperature = colorTemperatureString.substring(colorTemperatureString.indexOf(": ") + 2);
+            currentColorTemperature = currentColorTemperature.replaceAll("\\s+", "");
 
             //Convert string ip address to InetAddress form
             finalIpAddress = InetAddress.getByName(ipAddressString);
