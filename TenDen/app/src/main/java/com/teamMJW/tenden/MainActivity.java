@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -20,6 +21,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.app.AlertDialog;
+
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -51,23 +54,9 @@ public class MainActivity extends AppCompatActivity
         //Go to Settings Page
         goToSettingsPage();
 
-        new Thread(new AppStartSetup(MainActivity.this));
+        //Set the switch button to correct state
+        setPowerButtonState();
 
-        //extract value of the the "power" key
-        SharedPreferences s = getSharedPreferences("Startup_Data", 0);
-        String value = s.getString("power", "");
-
-        Switch powerButton = findViewById(R.id.powerSwitch);
-
-        //change the power switch button state depending on the power state of the bulb
-        if(value.compareTo("on") == 0) {
-            powerButton.setChecked(false);
-        } else {
-            powerButton.setChecked(true);
-        }
-
-        //remove the key-value pair from the temporary saved data
-        s.edit().remove("power").apply();
     }
 
     //Close the side menu when a menu item is selected
@@ -214,5 +203,39 @@ public class MainActivity extends AppCompatActivity
 
         //show the alert dialog
         builder.show();
+    }
+
+    //set the power switch button to the correct state when app starts
+    public void setPowerButtonState () {
+        //run bulb connection code
+        new Thread(new AppStartSetup(MainActivity.this)).start();
+
+        //above thread must finish before continuing
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        //get power status data from SharedPreferences (stores primitive data)
+        SharedPreferences s = PreferenceManager.getDefaultSharedPreferences(this);
+        String value = s.getString("power", null);
+
+        //get access to the switch button
+        Switch powerButton = findViewById(R.id.powerSwitch);
+
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!" + s.getAll());
+
+        //set the power switch button to correct position
+        if(value == null) {
+            powerButton.setChecked(false);
+        } else {
+            //change the power switch button state depending on the power state of the bulb
+            if(value.compareTo("on") == 0) {
+                powerButton.setChecked(true);
+            } else {
+                powerButton.setChecked(false);
+            }
+        }
     }
 }

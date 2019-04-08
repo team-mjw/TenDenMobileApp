@@ -3,6 +3,7 @@ package com.teamMJW.tenden;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.widget.Switch;
 
 import java.io.IOException;
@@ -29,11 +30,8 @@ public class AppStartSetup implements Runnable {
 
     private Context context;
 
-    private Switch switchB;
-
     public AppStartSetup(Activity context) {
         this.context = context;
-        switchB = context.findViewById(R.id.powerSwitch);
     }
 
     //function that will be called when BulbConnection object is called
@@ -41,11 +39,15 @@ public class AppStartSetup implements Runnable {
     public void run() {
         bulbConnect();
 
-        //temporary save the power status string to allow the power switch button to be displayed correctly
-        SharedPreferences preferences = context.getSharedPreferences("Startup_Data", 0);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("power", currentPowerStatus); //key: "power", value: "currentPowerStatus"
+        SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = p.edit();
+        editor.putString("power", currentPowerStatus);
         editor.apply();
+
+
+        System.out.println("----------------------------" + p.getAll());
+
+
     }
 
 
