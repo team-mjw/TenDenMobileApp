@@ -2,11 +2,11 @@ package com.teamMJW.tenden;
 
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.view.View;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Button;
+import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +33,8 @@ public class AlertSettings extends AppCompatActivity {
         alertSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                ImageView cloudImage = findViewById(R.id.cloudPicture);
+
                 String toastText;
 
                 //if switch button is in the "on" state, show the yellow light bulb and gray light bulb otherwise
@@ -55,6 +57,7 @@ public class AlertSettings extends AppCompatActivity {
 
                     //show the toast and change light bulb image
                     powerOnToast.show();
+                    cloudImage.setImageResource(R.drawable.weatheralert);
 
                     new Thread(new BulbConnection(toastText)).start();
 
@@ -77,6 +80,7 @@ public class AlertSettings extends AppCompatActivity {
 
                     //show the toast and change light bulb image
                     powerOffToast.show();
+                    cloudImage.setImageResource(R.drawable.greyweatheralert);
 
                     new Thread(new BulbConnection(toastText)).start();
 

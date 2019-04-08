@@ -1,8 +1,11 @@
 package com.teamMJW.tenden;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -19,6 +22,12 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.app.AlertDialog;
+
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -49,6 +58,10 @@ public class MainActivity extends AppCompatActivity
 
         //Go to Settings Page
         goToSettingsPage();
+
+        //Set the switch button to correct state
+        setStartState();
+
     }
 
     //Close the side menu when a menu item is selected
@@ -174,8 +187,14 @@ public class MainActivity extends AppCompatActivity
 
     //Display the Device List popup
     private void displayDeviceList() {
+        SharedPreferences s = PreferenceManager.getDefaultSharedPreferences(this);
+        String id = s.getString("id", null);
+
         //temporary strings in the device list
-        String[] devices = {"Device #1", "Device #2", "Device #3"};
+        List<String> deviceArrayList = new ArrayList<String>();
+        deviceArrayList.add(id);
+        String[] devices = deviceArrayList.toArray(new String[0]);
+
 
         //create an alert dialog for device list
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -195,5 +214,56 @@ public class MainActivity extends AppCompatActivity
 
         //show the alert dialog
         builder.show();
+    }
+
+    //set the device name and power switch button to the correct state when app starts
+    public void setStartState () {
+        //run bulb connection code
+        new Thread(new AppStartSetup(MainActivity.this)).start();
+
+        //above thread must finish before continuing
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+        //get device id and power status data from SharedPreferences (stores primitive data)
+        SharedPreferences s = getSharedPreferences("APPDATA", Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = s.getString("Bulb", null);
+        Device bulb = gson.fromJson(json, Device.class);
+        String powerState = bulb.getCurrentPowerStatus();
+        String id = bulb.getBulbId();
+
+        //get access to the switch button
+        Switch powerButton = findViewById(R.id.powerSwitch);
+        //get access to the TextView (Device Name)
+        TextView deviceName = findViewById(R.id.deviceName);
+
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!" + s.getAll());
+
+        //set the power switch button to correct position
+        if(powerState == null) {
+            powerButton.setChecked(false);
+        } else {
+            //change the power switch button state depending on the power state of the bulb
+            if(powerState.compareTo("on") == 0) {
+                powerButton.setChecked(true);
+            } else {
+                powerButton.setChecked(false);
+            }
+        }
+
+        //set device name text on the main page
+        if(id == null) {
+            deviceName.setText("Device Name");
+        } else {
+            deviceName.setText(id);
+            deviceName.setTextSize(20);
+        }
+
+
     }
 }
