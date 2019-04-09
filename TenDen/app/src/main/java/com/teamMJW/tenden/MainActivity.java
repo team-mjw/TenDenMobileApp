@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.color_scheme) {
             Toast.makeText(this, "Color Scheme", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.current_devices) {
+            System.out.println("************************");
             displayDeviceList();
         }
 
@@ -189,13 +190,38 @@ public class MainActivity extends AppCompatActivity
 
     //Display the Device List popup
     private void displayDeviceList() {
-        SharedPreferences s = PreferenceManager.getDefaultSharedPreferences(this);
-        String id = s.getString("id", null);
+        String devices[] = {"Device #1", "Device #2"};
+        if(emulatorMode) {
+            //temporary strings in the device list
+            List<String> deviceArrayList = new ArrayList<String>();
+            deviceArrayList.add("Device #1");
+            deviceArrayList.add("Device #2");
+            devices = deviceArrayList.toArray(new String[0]);
+        } else {
+            SharedPreferences s = getSharedPreferences("NEWDATA", Context.MODE_PRIVATE);
+            Gson gson = new Gson();
 
-        //temporary strings in the device list
-        List<String> deviceArrayList = new ArrayList<String>();
-        deviceArrayList.add(id);
-        String[] devices = deviceArrayList.toArray(new String[0]);
+            String json = s.getString("Bulb", null);
+            Device bulb = gson.fromJson(json, Device.class);
+
+            if(bulb == null) {
+                String id = "No Devices";
+
+                //temporary strings in the device list
+                List<String> deviceArrayList = new ArrayList<String>();
+                deviceArrayList.add(id);
+                devices = deviceArrayList.toArray(new String[0]);
+
+            } else {
+                String id = bulb.getName();
+
+                //temporary strings in the device list
+                List<String> deviceArrayList = new ArrayList<String>();
+                deviceArrayList.add(id);
+                devices = deviceArrayList.toArray(new String[0]);
+
+            }
+        }
 
 
         //create an alert dialog for device list
@@ -238,9 +264,7 @@ public class MainActivity extends AppCompatActivity
 
             powerButton.setChecked(false);
             deviceName.setText("Device Name");
-
         } else {
-
             //get device id and power status data from SharedPreferences (stores primitive data)
             SharedPreferences s = getSharedPreferences("APPDATA", Context.MODE_PRIVATE);
             Gson gson = new Gson();
@@ -272,7 +296,12 @@ public class MainActivity extends AppCompatActivity
             if (id == null) {
                 deviceName.setText("Device Name");
             } else {
-                deviceName.setText(id);
+                //get device id and power status data from SharedPreferences (stores primitive data)
+                SharedPreferences sp = getSharedPreferences("NEWDATA", Context.MODE_PRIVATE);
+                Gson gson_name = new Gson();
+                String json_name = sp.getString("Bulb", null);
+                Device bulb_name = gson_name.fromJson(json_name, Device.class);
+                deviceName.setText(bulb_name.getName());
                 deviceName.setTextSize(20);
             }
         }

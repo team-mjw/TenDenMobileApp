@@ -1,10 +1,13 @@
 package com.teamMJW.tenden;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -20,12 +23,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.app.AlertDialog;
 
+import com.google.gson.Gson;
+
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DeviceSettings extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     protected DrawerLayout drawer;
+    protected boolean emulatorMode = true;
     //
     TextView txt_help_gest;
     TextView txt_help_gest2;
@@ -174,8 +182,39 @@ public class DeviceSettings extends AppCompatActivity
 
     //Display the Device List popup
     private void displayDeviceList() {
-        //temporary strings in the device list
-        String[] devices = {"Device #1", "Device #2", "Device #3"};
+        String devices[] = {"Device #1", "Device #2"};
+
+        if(emulatorMode) {
+            //temporary strings in the device list
+            List<String> deviceArrayList = new ArrayList<String>();
+            deviceArrayList.add("Device #1");
+            deviceArrayList.add("Device #2");
+            devices = deviceArrayList.toArray(new String[0]);
+        } else {
+            SharedPreferences s = getSharedPreferences("NEWDATA", Context.MODE_PRIVATE);
+            Gson gson = new Gson();
+
+            String json = s.getString("Bulb", null);
+            Device bulb = gson.fromJson(json, Device.class);
+
+            if(bulb == null) {
+                String id = "No Devices";
+
+                //temporary strings in the device list
+                List<String> deviceArrayList = new ArrayList<String>();
+                deviceArrayList.add(id);
+                devices = deviceArrayList.toArray(new String[0]);
+
+            } else {
+                String id = bulb.getName();
+
+                //temporary strings in the device list
+                List<String> deviceArrayList = new ArrayList<String>();
+                deviceArrayList.add(id);
+                devices = deviceArrayList.toArray(new String[0]);
+
+            }
+        }
 
         //create an alert dialog for device list
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

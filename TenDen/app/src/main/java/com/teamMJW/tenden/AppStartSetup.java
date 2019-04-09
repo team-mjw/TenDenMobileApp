@@ -45,7 +45,9 @@ public class AppStartSetup implements Runnable {
 
         if(emulatorMode) {
 
-            Device myBulb = new Device(bulbId, currentPowerStatus, currentBrightness, currentColorTemperature, finalIpAddress);
+
+        } else {
+            Device myBulb = new Device("", bulbId, currentPowerStatus, currentBrightness, currentColorTemperature, finalIpAddress);
 
             SharedPreferences p = context.getSharedPreferences("APPDATA", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = p.edit();
@@ -55,7 +57,6 @@ public class AppStartSetup implements Runnable {
             editor.apply();
 
             System.out.println("----------------------------" + p.getAll());
-
         }
 
     }
