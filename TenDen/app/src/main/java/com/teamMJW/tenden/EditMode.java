@@ -3,6 +3,7 @@ package com.teamMJW.tenden;
 import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -46,8 +47,9 @@ public class EditMode extends AppCompatActivity implements AsyncResponse {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        edit();
+        fillFields();
         zipBtn();
+        saveBtn();
         cancel();
     }
 
@@ -58,6 +60,7 @@ public class EditMode extends AppCompatActivity implements AsyncResponse {
             public void onClick(View view) {
                 Snackbar.make(view, "Canceled", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                setResult(Activity.RESULT_CANCELED);
                 finish();
             }
         });
@@ -76,12 +79,37 @@ public class EditMode extends AppCompatActivity implements AsyncResponse {
             }
         });
     }
+
+    private void saveBtn() {
+        Button saveBtn = (Button) findViewById(R.id.saveButton);
+        saveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Grab all fields and send data back to device settings page
+                EditText name = (EditText) findViewById(R.id.modeName);
+                EditText brightness = (EditText) findViewById(R.id.edit_brightness);
+                EditText temperature = (EditText) findViewById(R.id.edit_temperature);
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("name", name.getText().toString());
+                resultIntent.putExtra("brightness", brightness.getText().toString());
+                resultIntent.putExtra("temperature", temperature.getText().toString());
+                setResult(Activity.RESULT_OK, resultIntent);
+                finish();
+            }
+        });    }
+
     //populating the fields with the current mode data
-    private void edit() {
-        if (getIntent().hasExtra("modeName")) {
-            String name = getIntent().getExtras().getString("modeName");
-            int zipcode = 96801;
+    private void fillFields() {
+        if (getIntent().hasExtra("name")) {
+            String name = getIntent().getExtras().getString("name");
+            int brightValue = getIntent().getExtras().getInt("brightness");
+            int tempValue = getIntent().getExtras().getInt("temperature");
             EditText editName = (EditText) findViewById(R.id.modeName);
+            EditText brightness = (EditText) findViewById(R.id.edit_brightness);
+            EditText temperature = (EditText) findViewById(R.id.edit_temperature);
+            editName.setText(name);
+            brightness.setText("" + brightValue);
+            temperature.setText("" + tempValue);
             //editName.setText(name);
             //feed.getWeather(zipcode);
 
@@ -91,7 +119,7 @@ public class EditMode extends AppCompatActivity implements AsyncResponse {
     //Do something with the retrieved weather value
     @Override
     public void processFinish(String output) {
-        EditText editName = (EditText) findViewById(R.id.modeName);
+        EditText editName = (EditText) findViewById(R.id.current_weather);
         editName.setText(output);
         String temp = output.toLowerCase();
         int number = Integer.parseInt(output.substring(0,2));
