@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity
 
     protected DrawerLayout drawer;
 
-    protected boolean emulatorMode = true;
+    protected boolean emulatorMode = false;
 
     //Initialize the starting state of the Main Page
     @Override
@@ -278,8 +278,6 @@ public class MainActivity extends AppCompatActivity
             //get access to the TextView (Device Name)
             TextView deviceName = findViewById(R.id.deviceName);
 
-            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!" + s.getAll());
-
             //set the power switch button to correct position
             if (powerState == null) {
                 powerButton.setChecked(false);
@@ -301,11 +299,16 @@ public class MainActivity extends AppCompatActivity
                 Gson gson_name = new Gson();
                 String json_name = sp.getString("Bulb", null);
                 Device bulb_name = gson_name.fromJson(json_name, Device.class);
-                deviceName.setText(bulb_name.getName());
-                deviceName.setTextSize(20);
+
+
+                if(bulb_name == null) {
+                    deviceName.setText("Non-Registered Device");
+                    deviceName.setTextSize(20);
+                } else {
+                    deviceName.setText(bulb_name.getName());
+                    deviceName.setTextSize(20);
+                }
             }
         }
-
-
     }
 }
