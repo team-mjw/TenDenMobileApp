@@ -1,20 +1,28 @@
 package com.teamMJW.tenden;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 public class AddDevice extends AppCompatActivity {
 
+    TextView deviceid;
+    TextView devicePower;
+    TextView deviceBrightness;
+    TextView deviceColorTemp;
+    TextView deviceIp;
     private boolean emulatorMode = true;
 
     @Override
@@ -24,17 +32,48 @@ public class AddDevice extends AppCompatActivity {
 
         setDeviceInformation();
 
+        addDevice();
     }
 
-    public void setDeviceInformation() {
+    //Confirm Button
+    private void addDevice() {
+        //create Button object and associate the Confirm button with it
+        Button settingButton = findViewById(R.id.addDeviceButton);
+        //if the button is clicked, then add Device and go to Main page
+        settingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EditText editname = findViewById(R.id.deviceName);
+                String editnameText = editname.getText().toString();
+                SharedPreferences s = getSharedPreferences("APPDATA", Context.MODE_PRIVATE);
+                Gson gson = new Gson();
+
+                String json = s.getString("Bulb", null);
+                Device bulb = gson.fromJson(json, Device.class);
+
+                Device myBulb = new Device(editnameText, deviceid.getText().toString(), devicePower.getText().toString(), deviceBrightness.getText().toString(),
+                        deviceColorTemp.getText().toString(), bulb.getCurrentIP());
+                SharedPreferences p = getSharedPreferences("NEWDATA", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = p.edit();
+                Gson gsonTo = new Gson();
+                String jsonTo = gsonTo.toJson(myBulb);
+                editor.putString("Bulb", jsonTo);
+                editor.apply();
+
+                System.out.println("----------------------------" + p.getAll());
+                startActivity(new Intent(AddDevice.this, MainActivity.class));
+            }
+        });
+    }
+
+    private void setDeviceInformation() {
 
         if(emulatorMode) {
-
-            TextView deviceid = findViewById(R.id.device_id);
-            TextView devicePower = findViewById(R.id.device_power);
-            TextView deviceBrightness = findViewById(R.id.device_brightness);
-            TextView deviceColorTemp = findViewById(R.id.device_colortemp);
-            TextView deviceIp = findViewById(R.id.device_ip);
+            deviceid = findViewById(R.id.device_id);
+            devicePower = findViewById(R.id.device_power);
+            deviceBrightness = findViewById(R.id.device_brightness);
+            deviceColorTemp = findViewById(R.id.device_colortemp);
+            deviceIp = findViewById(R.id.device_ip);
 
             deviceid.setText("Device ID: ?");
 
@@ -59,11 +98,11 @@ public class AddDevice extends AppCompatActivity {
             String ct = bulb.getCurrentCT();
             InetAddress ip = bulb.getCurrentIP();
 
-            TextView deviceid = findViewById(R.id.device_id);
-            TextView devicePower = findViewById(R.id.device_power);
-            TextView deviceBrightness = findViewById(R.id.device_brightness);
-            TextView deviceColorTemp = findViewById(R.id.device_colortemp);
-            TextView deviceIp = findViewById(R.id.device_ip);
+            deviceid = findViewById(R.id.device_id);
+            devicePower = findViewById(R.id.device_power);
+            deviceBrightness = findViewById(R.id.device_brightness);
+            deviceColorTemp = findViewById(R.id.device_colortemp);
+            deviceIp = findViewById(R.id.device_ip);
 
             if (id == null) {
                 deviceid.setText("Device ID: ?");
