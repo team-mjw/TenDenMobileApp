@@ -16,9 +16,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginTop="60dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
-        android:layout_marginBottom="32dp"
         android:text="Device Settings"
         android:textColor="@android:color/black"
         android:textSize="36sp"
@@ -26,76 +26,85 @@
         android:typeface="sans"
         android:visibility="visible"
         app:fontFamily="monospace"
-        app:layout_constraintBottom_toTopOf="@+id/help_title_gest"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/help_title_gest"
-        android:layout_width="274dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="68dp"
-        android:layout_marginLeft="68dp"
-        android:layout_marginTop="156dp"
-        android:background="@color/white"
-        android:clickable="true"
-        android:focusable="true"
-        android:onClick="toggle_contents1"
-        android:text="Cloudy"
-        android:textSize="20sp"
-        android:typeface="sans"
-        android:visibility="visible"
-        app:fontFamily="monospace"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+        <ListView
+            android:id="@+id/modeList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/alertTitle"
+            app:layout_constraintBottom_toTopOf="@+id/addModeButton"
+            app:layout_constraintLeft_toLeftOf="parent">
+        </ListView>
 
-    <TextView
-        android:id="@+id/txt_help_gest"
-        android:layout_width="274dp"
-        android:layout_height="100dp"
-        android:layout_marginStart="68dp"
-        android:layout_marginLeft="68dp"
-        android:layout_marginTop="196dp"
-        android:background="@color/white"
-        android:text="Attributes"
-        app:fontFamily="monospace"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <!--<TextView-->
+        <!--android:id="@+id/help_title_gest"-->
+        <!--android:layout_width="274dp"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:layout_marginStart="68dp"-->
+        <!--android:layout_marginLeft="68dp"-->
+        <!--android:layout_marginTop="156dp"-->
+        <!--android:background="@color/white"-->
+        <!--android:clickable="true"-->
+        <!--android:focusable="true"-->
+        <!--android:onClick="toggle_contents1"-->
+        <!--android:text="Cloudy"-->
+        <!--android:textSize="20sp"-->
+        <!--android:typeface="sans"-->
+        <!--android:visibility="visible"-->
+        <!--app:fontFamily="monospace"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent" />-->
 
 
-    <TextView
-        android:id="@+id/help_title_gest2"
-        android:layout_width="274dp"
-        android:layout_height="51dp"
-        android:layout_marginStart="68dp"
-        android:layout_marginLeft="68dp"
-        android:layout_marginTop="316dp"
-        android:background="@color/white"
-        android:clickable="true"
-        android:focusable="true"
-        android:onClick="toggle_contents2"
-        android:text="Sunny"
-        android:textSize="20sp"
-        android:typeface="sans"
-        android:visibility="visible"
-        app:fontFamily="monospace"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <!--<TextView-->
+        <!--android:id="@+id/txt_help_gest"-->
+        <!--android:layout_width="274dp"-->
+        <!--android:layout_height="100dp"-->
+        <!--android:layout_marginStart="68dp"-->
+        <!--android:layout_marginLeft="68dp"-->
+        <!--android:layout_marginTop="196dp"-->
+        <!--android:background="@color/white"-->
+        <!--android:text="Attributes"-->
+        <!--app:fontFamily="monospace"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent" />-->
 
-    <TextView
-        android:id="@+id/txt_help_gest2"
-        android:layout_width="275dp"
-        android:layout_height="118dp"
-        android:layout_marginStart="68dp"
-        android:layout_marginLeft="68dp"
-        android:layout_marginTop="364dp"
-        android:background="@color/white"
-        android:text="Attributes"
-        app:fontFamily="monospace"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+
+    <!--<TextView-->
+        <!--android:id="@+id/help_title_gest2"-->
+        <!--android:layout_width="274dp"-->
+        <!--android:layout_height="51dp"-->
+        <!--android:layout_marginStart="68dp"-->
+        <!--android:layout_marginLeft="68dp"-->
+        <!--android:layout_marginTop="316dp"-->
+        <!--android:background="@color/white"-->
+        <!--android:clickable="true"-->
+        <!--android:focusable="true"-->
+        <!--android:onClick="toggle_contents2"-->
+        <!--android:text="Sunny"-->
+        <!--android:textSize="20sp"-->
+        <!--android:typeface="sans"-->
+        <!--android:visibility="visible"-->
+        <!--app:fontFamily="monospace"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/txt_help_gest2"-->
+        <!--android:layout_width="275dp"-->
+        <!--android:layout_height="118dp"-->
+        <!--android:layout_marginStart="68dp"-->
+        <!--android:layout_marginLeft="68dp"-->
+        <!--android:layout_marginTop="364dp"-->
+        <!--android:background="@color/white"-->
+        <!--android:text="Attributes"-->
+        <!--app:fontFamily="monospace"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent" />-->
 
 
     <Button
@@ -122,135 +131,135 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.961" />
 
-    <ImageButton
-        android:id="@+id/imageButton2"
-        android:layout_width="50dp"
-        android:layout_height="34dp"
-        android:layout_marginTop="160dp"
-        android:layout_marginEnd="80dp"
-        android:layout_marginRight="80dp"
-        android:background="@color/backgroundPrimaryColor"
-        android:clickable="true"
-        android:onClick="toggle_contents1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/arrow_down_float" />
+    <!--<ImageButton-->
+        <!--android:id="@+id/imageButton2"-->
+        <!--android:layout_width="50dp"-->
+        <!--android:layout_height="34dp"-->
+        <!--android:layout_marginTop="160dp"-->
+        <!--android:layout_marginEnd="80dp"-->
+        <!--android:layout_marginRight="80dp"-->
+        <!--android:background="@color/backgroundPrimaryColor"-->
+        <!--android:clickable="true"-->
+        <!--android:onClick="toggle_contents1"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--app:srcCompat="@android:drawable/arrow_down_float" />-->
 
-    <ImageButton
-        android:id="@+id/imageButton"
-        android:layout_width="50dp"
-        android:layout_height="34dp"
-        android:layout_marginTop="324dp"
-        android:layout_marginEnd="80dp"
-        android:layout_marginRight="80dp"
-        android:background="@color/backgroundPrimaryColor"
-        android:clickable="true"
-        android:onClick="toggle_contents2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/arrow_down_float" />
+    <!--<ImageButton-->
+        <!--android:id="@+id/imageButton"-->
+        <!--android:layout_width="50dp"-->
+        <!--android:layout_height="34dp"-->
+        <!--android:layout_marginTop="324dp"-->
+        <!--android:layout_marginEnd="80dp"-->
+        <!--android:layout_marginRight="80dp"-->
+        <!--android:background="@color/backgroundPrimaryColor"-->
+        <!--android:clickable="true"-->
+        <!--android:onClick="toggle_contents2"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--app:srcCompat="@android:drawable/arrow_down_float" />-->
 
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="69dp"
-        android:layout_height="25dp"
-        android:layout_marginStart="88dp"
-        android:layout_marginLeft="88dp"
-        android:layout_marginTop="4dp"
-        android:background="@color/accentColor"
-        app:layout_constraintStart_toStartOf="@+id/help_title_gest"
-        app:layout_constraintTop_toTopOf="@+id/help_title_gest" />
+    <!--<TextView-->
+        <!--android:id="@+id/textView8"-->
+        <!--android:layout_width="69dp"-->
+        <!--android:layout_height="25dp"-->
+        <!--android:layout_marginStart="88dp"-->
+        <!--android:layout_marginLeft="88dp"-->
+        <!--android:layout_marginTop="4dp"-->
+        <!--android:background="@color/accentColor"-->
+        <!--app:layout_constraintStart_toStartOf="@+id/help_title_gest"-->
+        <!--app:layout_constraintTop_toTopOf="@+id/help_title_gest" />-->
 
-    <TextView
-        android:id="@+id/textView9"
-        android:layout_width="71dp"
-        android:layout_height="26dp"
-        android:layout_marginStart="88dp"
-        android:layout_marginLeft="88dp"
-        android:layout_marginTop="8dp"
-        android:background="@color/powerOffColor"
-        app:layout_constraintStart_toStartOf="@+id/help_title_gest2"
-        app:layout_constraintTop_toTopOf="@+id/help_title_gest2" />
+    <!--<TextView-->
+        <!--android:id="@+id/textView9"-->
+        <!--android:layout_width="71dp"-->
+        <!--android:layout_height="26dp"-->
+        <!--android:layout_marginStart="88dp"-->
+        <!--android:layout_marginLeft="88dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:background="@color/powerOffColor"-->
+        <!--app:layout_constraintStart_toStartOf="@+id/help_title_gest2"-->
+        <!--app:layout_constraintTop_toTopOf="@+id/help_title_gest2" />-->
 
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="91dp"
-        android:layout_height="36dp"
-        android:layout_marginTop="68dp"
-        android:text="Edit Attribute"
-        android:textSize="8sp"
-        app:layout_constraintStart_toStartOf="@+id/txt_help_gest"
-        app:layout_constraintTop_toTopOf="@+id/txt_help_gest" />
+    <!--<Button-->
+        <!--android:id="@+id/button1"-->
+        <!--android:layout_width="91dp"-->
+        <!--android:layout_height="36dp"-->
+        <!--android:layout_marginTop="68dp"-->
+        <!--android:text="Edit Attribute"-->
+        <!--android:textSize="8sp"-->
+        <!--app:layout_constraintStart_toStartOf="@+id/txt_help_gest"-->
+        <!--app:layout_constraintTop_toTopOf="@+id/txt_help_gest" />-->
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="92dp"
-        android:layout_height="33dp"
-        android:layout_marginTop="88dp"
-        android:text="Edit Attribute"
-        android:textSize="8sp"
-        app:layout_constraintStart_toStartOf="@+id/txt_help_gest2"
-        app:layout_constraintTop_toTopOf="@+id/txt_help_gest2" />
+    <!--<Button-->
+        <!--android:id="@+id/button2"-->
+        <!--android:layout_width="92dp"-->
+        <!--android:layout_height="33dp"-->
+        <!--android:layout_marginTop="88dp"-->
+        <!--android:text="Edit Attribute"-->
+        <!--android:textSize="8sp"-->
+        <!--app:layout_constraintStart_toStartOf="@+id/txt_help_gest2"-->
+        <!--app:layout_constraintTop_toTopOf="@+id/txt_help_gest2" />-->
 
-    <ScrollView
-        android:id="@+id/scrollview1"
-        android:layout_width="226dp"
-        android:layout_height="44dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginLeft="36dp"
-        android:layout_marginTop="60dp"
-        app:layout_constraintStart_toStartOf="@+id/txt_help_gest"
-        app:layout_constraintTop_toTopOf="@+id/help_title_gest">
+    <!--<ScrollView-->
+        <!--android:id="@+id/scrollview1"-->
+        <!--android:layout_width="226dp"-->
+        <!--android:layout_height="44dp"-->
+        <!--android:layout_marginStart="36dp"-->
+        <!--android:layout_marginLeft="36dp"-->
+        <!--android:layout_marginTop="60dp"-->
+        <!--app:layout_constraintStart_toStartOf="@+id/txt_help_gest"-->
+        <!--app:layout_constraintTop_toTopOf="@+id/help_title_gest">-->
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="vertical">-->
 
-            <TextView
-                android:id="@+id/textView14"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Brightness (-100 - 100)" />
+            <!--<TextView-->
+                <!--android:id="@+id/textView14"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="Brightness (-100 - 100)" />-->
 
-            <TextView
-                android:id="@+id/textView20"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Temperature (1700 - 4000k)" />
+            <!--<TextView-->
+                <!--android:id="@+id/textView20"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="Temperature (1700 - 4000k)" />-->
 
-        </LinearLayout>
-    </ScrollView>
+        <!--</LinearLayout>-->
+    <!--</ScrollView>-->
 
-    <ScrollView
-        android:id="@+id/scrollview2"
-        android:layout_width="221dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginLeft="36dp"
-        android:layout_marginTop="24dp"
-        app:layout_constraintStart_toStartOf="@+id/txt_help_gest2"
-        app:layout_constraintTop_toTopOf="@+id/txt_help_gest2">
+    <!--<ScrollView-->
+        <!--android:id="@+id/scrollview2"-->
+        <!--android:layout_width="221dp"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:layout_marginStart="36dp"-->
+        <!--android:layout_marginLeft="36dp"-->
+        <!--android:layout_marginTop="24dp"-->
+        <!--app:layout_constraintStart_toStartOf="@+id/txt_help_gest2"-->
+        <!--app:layout_constraintTop_toTopOf="@+id/txt_help_gest2">-->
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="vertical" >-->
 
-            <TextView
-                android:id="@+id/textView7"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Brightness (-100 - 100)" />
+            <!--<TextView-->
+                <!--android:id="@+id/textView7"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="Brightness (-100 - 100)" />-->
 
-            <TextView
-                android:id="@+id/textView10"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Temperature (1200 - 4000k)" />
+            <!--<TextView-->
+                <!--android:id="@+id/textView10"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="Temperature (1200 - 4000k)" />-->
 
-        </LinearLayout>
-    </ScrollView>
+        <!--</LinearLayout>-->
+    <!--</ScrollView>-->
 
 
     <Button

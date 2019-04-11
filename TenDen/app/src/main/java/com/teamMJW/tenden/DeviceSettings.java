@@ -17,11 +17,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.app.AlertDialog;
+
+import org.w3c.dom.Text;
 
 import com.google.gson.Gson;
 
@@ -31,6 +34,8 @@ import java.util.List;
 
 public class DeviceSettings extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    static final int EDIT_MODE_REQUEST = 1;  // The request code
 
     protected DrawerLayout drawer;
     protected boolean emulatorMode = true;
@@ -50,20 +55,46 @@ public class DeviceSettings extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        ListView modeList = (ListView) findViewById(R.id.modeList);
+        modeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent mode = new Intent(getApplicationContext(), EditMode.class);
+                TextView name = (TextView) view.findViewById(R.id.device_settings_mode_name);
+                TextView bright = (TextView) view.findViewById(R.id.brightness_value);
+                TextView temp = (TextView) view.findViewById(R.id.temperature_value);
+                Toast.makeText(getApplicationContext(), "Text view "+name.getText().toString() + bright.getText().toString()
+                        ,Toast.LENGTH_LONG).show();
+                mode.putExtra("name", name.getText().toString());
+                mode.putExtra("brightness", Integer.parseInt(bright.getText().toString()));
+                mode.putExtra("temperature", Integer.parseInt(temp.getText().toString()));
+
+                startActivityForResult(mode, EDIT_MODE_REQUEST);
+            }
+        });
+
+        String[] modeListTest = {"All 1", "Mode 2", "Mode 3"};
+
+        JSONHandler json = new JSONHandler(this);
+
+        ArrayList<Mode> modes = json.getModeArrayFromJSON(getString(R.string.modes_file));
+        ModeListAdapter adapter = new ModeListAdapter(this, R.layout.device_settings_mode, modes);
+        modeList.setAdapter(adapter);
+
         //for expandable ListView
-        txt_help_gest = (TextView) findViewById(R.id.txt_help_gest);
-        txt_help_gest2 = (TextView) findViewById(R.id.txt_help_gest2);
-        button1 = (Button) findViewById(R.id.button1);
-        button2 = (Button) findViewById(R.id.button2);
-        scrollview1 = (ScrollView) findViewById(R.id.scrollview1);
-        scrollview2 = (ScrollView) findViewById(R.id.scrollview2);
-        // hide until its title is clicked
-        txt_help_gest.setVisibility(View.GONE);
-        txt_help_gest2.setVisibility(View.GONE);
-        button1.setVisibility(Button.GONE);
-        button2.setVisibility(Button.GONE);
-        scrollview1.setVisibility(Button.GONE);
-        scrollview2.setVisibility(Button.GONE);
+//        txt_help_gest = (TextView) findViewById(R.id.txt_help_gest);
+//        txt_help_gest2 = (TextView) findViewById(R.id.txt_help_gest2);
+//        button1 = (Button) findViewById(R.id.button1);
+//        button2 = (Button) findViewById(R.id.button2);
+//        scrollview1 = (ScrollView) findViewById(R.id.scrollview1);
+//        scrollview2 = (ScrollView) findViewById(R.id.scrollview2);
+//        // hide until its title is clicked
+//        txt_help_gest.setVisibility(View.GONE);
+//        txt_help_gest2.setVisibility(View.GONE);
+//        button1.setVisibility(Button.GONE);
+//        button2.setVisibility(Button.GONE);
+//        scrollview1.setVisibility(Button.GONE);
+//        scrollview2.setVisibility(Button.GONE);
 
         drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -78,6 +109,15 @@ public class DeviceSettings extends AppCompatActivity
         goBackToMainPage();
         goToEditMode();
     }
+
+//    public void editSelectedMode(View view) {
+//        Toast.makeText(this, "Button "+bt.getText().toString(),Toast.LENGTH_LONG).show();
+//        Intent mode = new Intent(getApplicationContext(), EditMode.class);
+//        mode.putExtra("modeNumber", bt.getText().toString());
+//        startActivity(mode);
+//    }
+
+
 
     /**
      * onClick handler
@@ -251,12 +291,20 @@ public class DeviceSettings extends AppCompatActivity
             });
     };
 
-    private void getModes() {
-        Resources r = getResources();
-        int id = r.getIdentifier("modes", "raw", this.getPackageName());
-        InputStream input = r.openRawResource(id);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == EDIT_MODE_REQUEST) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                String modeName = data.getExtras().getString("name");
+                int brightness = Integer.parseInt(data.getExtras().getString("brightness"));
+                int temperature = Integer.parseInt(data.getExtras().getString("temperature"));
+                JSONHandler json = new JSONHandler(this);
+                json.writeJSON(getString(R.string.modes_file), modeName, brightness, temperature);
 
-
+            }
+        }
     }
 
 
