@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity
     protected DrawerLayout drawer;
     public static String userZipCode;
 
-    public static boolean emulatorMode = false;
+    public static boolean emulatorMode = true;
 
     //Initialize the starting state of the Main Page
     @Override
