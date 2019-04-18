@@ -74,6 +74,7 @@ public class EditMode extends AppCompatActivity implements AsyncResponse {
                 //testing. Sticking the weather into modeName for now
                 EditText zipcode = (EditText) findViewById(R.id.zipcode);
                 if(!TextUtils.isEmpty(zipcode.getText())) {
+                    MainActivity.userZipCode = zipcode.getText().toString();
                     feed.getWeather(Integer.parseInt(zipcode.getText().toString()));
                 }
             }

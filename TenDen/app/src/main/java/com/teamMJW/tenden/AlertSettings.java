@@ -2,7 +2,6 @@ package com.teamMJW.tenden;
 
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -11,9 +10,13 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class AlertSettings extends AppCompatActivity {
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
-    protected DrawerLayout drawer;
+import java.io.IOException;
+
+public class AlertSettings extends AppCompatActivity {
+    boolean alertExists = false;
 
     //Initialize the starting state of the Main Page
     @Override
@@ -61,6 +64,8 @@ public class AlertSettings extends AppCompatActivity {
 
                     new Thread(new BulbConnection(toastText)).start();
 
+                    getWeatherAlertInformation();
+
                 } else {
                     toastText = alertSwitch.getTextOff().toString();
 
@@ -88,6 +93,44 @@ public class AlertSettings extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void getWeatherAlertInformation() {
+        boolean exists = false;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final StringBuilder builder = new StringBuilder();
+
+                try {
+                    System.out.println("User's Zipcode: " + MainActivity.userZipCode);
+
+                    String url = "https://www.weatherusa.net/wxwarnings?zip=" + MainActivity.userZipCode;
+
+                    Document doc = Jsoup.connect(url).get();
+
+                    String content = doc.body().text();
+                    builder.append(content);
+                    alertExists = false;
+                    alertExists = content.contains("Active");
+                    System.out.println("Alerts Exists ?: " + alertExists);
+
+                    if (alertExists) {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                BulbAlert alert = new BulbAlert();
+                                alert.run();
+                            }
+                        }).start();
+                    }
+
+
+                } catch (IOException e) {
+                    builder.append("Error IO Exception");
+                }
+            }
+        }).start();
     }
 
 }

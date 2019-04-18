@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -22,9 +21,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.app.AlertDialog;
-
 import com.google.gson.Gson;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -33,8 +30,9 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     protected DrawerLayout drawer;
+    public static String userZipCode;
 
-    protected boolean emulatorMode = false;
+    public static boolean emulatorMode = false;
 
     //Initialize the starting state of the Main Page
     @Override
@@ -87,7 +85,6 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.color_scheme) {
             Toast.makeText(this, "Color Scheme", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.current_devices) {
-            System.out.println("************************");
             displayDeviceList();
         }
 

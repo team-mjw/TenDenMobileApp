@@ -8,13 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Switch;
 import android.widget.TextView;
-
 import com.google.gson.Gson;
-
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 public class AddDevice extends AppCompatActivity {
 
@@ -23,7 +19,6 @@ public class AddDevice extends AppCompatActivity {
     TextView deviceBrightness;
     TextView deviceColorTemp;
     TextView deviceIp;
-    private boolean emulatorMode = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +63,7 @@ public class AddDevice extends AppCompatActivity {
 
     private void setDeviceInformation() {
 
-        if(emulatorMode) {
+        if(MainActivity.emulatorMode) {
             deviceid = findViewById(R.id.device_id);
             devicePower = findViewById(R.id.device_power);
             deviceBrightness = findViewById(R.id.device_brightness);

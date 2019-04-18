@@ -38,8 +38,7 @@ public class DeviceSettings extends AppCompatActivity
     static final int EDIT_MODE_REQUEST = 1;  // The request code
 
     protected DrawerLayout drawer;
-    protected boolean emulatorMode = true;
-    //
+
     TextView txt_help_gest;
     TextView txt_help_gest2;
     Button button1;
@@ -169,8 +168,19 @@ public class DeviceSettings extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.weather_alert_button) {
-            Intent mode = new Intent(DeviceSettings.this, AlertSettings.class);
-            startActivity(mode);
+            if(MainActivity.userZipCode == null) {
+                //create an alert dialog for device list
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                //set the title
+                builder.setTitle("Hold up!");
+                //set the app description
+                builder.setMessage("Please Enter a ZipCode in Create Mode Page");
+                //show the alert dialog
+                builder.show();
+            } else {
+                Intent mode = new Intent(DeviceSettings.this, AlertSettings.class);
+                startActivity(mode);
+            }
         }
 
         return true;
@@ -224,7 +234,7 @@ public class DeviceSettings extends AppCompatActivity
     private void displayDeviceList() {
         String devices[] = {"Device #1", "Device #2"};
 
-        if(emulatorMode) {
+        if(MainActivity.emulatorMode) {
             //temporary strings in the device list
             List<String> deviceArrayList = new ArrayList<String>();
             deviceArrayList.add("Device #1");
