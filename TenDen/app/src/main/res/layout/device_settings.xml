@@ -31,6 +31,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Modes"
+        android:textColor="@android:color/black"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        android:typeface="sans"
+        android:visibility="visible"
+        android:gravity="center"
+        app:fontFamily="monospace"
+        app:layout_constraintBottom_toTopOf="@+id/modeList"
+
+        />
         <ListView
             android:id="@+id/modeList"
             android:layout_width="match_parent"
