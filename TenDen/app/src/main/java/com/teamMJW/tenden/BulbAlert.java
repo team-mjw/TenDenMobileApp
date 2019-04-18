@@ -1,17 +1,13 @@
 package com.teamMJW.tenden;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
-
-import com.google.gson.Gson;
-
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.Socket;
 
-public class AppStartSetup implements Runnable {
+public class BulbAlert implements Runnable {
 
     //String of the HTTP Request to Light Bulb
     final private String initialRequestString = "M-SEARCH * HTTP/1.1\r\n" + "HOST:239.255.255.250:1982\r\n" + "MAN:\"ssdp:discover\"\r\n" + "ST:wifi_bulb\r\n";
@@ -26,43 +22,15 @@ public class AppStartSetup implements Runnable {
 
     private String currentColorTemperature;
 
-    private String requestFunc;
-
-    private Context context;
-
-
-    public AppStartSetup(Activity context) {
-        this.context = context;
-    }
-
-    //function that will be called when BulbConnection object is called
+    //function that will be called when BulbAlert object is called
     @Override
     public void run() {
-        bulbConnect();
-
-        if(MainActivity.emulatorMode) {
-
-
-        } else {
-            Device myBulb = new Device("", bulbId, currentPowerStatus, currentBrightness, currentColorTemperature, finalIpAddress);
-
-            SharedPreferences p = context.getSharedPreferences("APPDATA", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = p.edit();
-            Gson gson = new Gson();
-            String json = gson.toJson(myBulb);
-            editor.putString("Bulb", json);
-            editor.apply();
-
-            System.out.println("++++++++" + bulbId);
-        }
-
+        setupAlertCycle();
     }
 
 
-    //Initial UDP Connection with the light by grabing bulb information in HTTP response packet
-    //The following information is provided in the response packet:
-    //1) unique id, 2) ip address, 3) power status, 4) brightness, and 5) color temperature
-    private void bulbConnect() {
+    //UDP Connection with the light bulb and run 'flicker' when there is weather alert in the user input zipcode
+    private void setupAlertCycle() {
         try {
             System.out.println("*****Searching for Device*****\n");
 
@@ -96,8 +64,6 @@ public class AppStartSetup implements Runnable {
             //Convert the Data in the Response Packet to String form for ip address extraction
             String responseString = new String(receivePacket.getData());
 
-            System.out.println(">>>>>" + responseString);
-
             //temporary variables to extract various information of the light bulb
             String ipAddressString = responseString;
             String idString = responseString;
@@ -117,30 +83,29 @@ public class AppStartSetup implements Runnable {
             idString = idString.substring(idString.indexOf("id:"));
             idString = idString.substring(0, idString.indexOf("\n"));
             bulbId = idString.substring(idString.indexOf(": ") + 2);
-            bulbId = bulbId.replaceAll("\\s+", "");
 
             //Extract current power status
             powerStatusString = powerStatusString.substring(powerStatusString.indexOf("power:"));
             powerStatusString = powerStatusString.substring(0, powerStatusString.indexOf("\n"));
             currentPowerStatus = powerStatusString.substring(powerStatusString.indexOf(": ") + 2);
-            currentPowerStatus = currentPowerStatus.replaceAll("\\s+", "");
 
             //Extract current brightness value
             brightnessString = brightnessString.substring(brightnessString.indexOf("bright:"));
             brightnessString = brightnessString.substring(0, brightnessString.indexOf("\n"));
             currentBrightness = brightnessString.substring(brightnessString.indexOf(": ") + 2);
-            currentBrightness = currentBrightness.replaceAll("\\s+", "");
 
             //Extract current color temperature
             colorTemperatureString = colorTemperatureString.substring(colorTemperatureString.indexOf("ct:"));
             colorTemperatureString = colorTemperatureString.substring(0, colorTemperatureString.indexOf("\n"));
             currentColorTemperature = colorTemperatureString.substring(colorTemperatureString.indexOf(": ") + 2);
-            currentColorTemperature = currentColorTemperature.replaceAll("\\s+", "");
 
             //Convert string ip address to InetAddress form
             finalIpAddress = InetAddress.getByName(ipAddressString);
 
             System.out.println("*****Device Discovered*****\n");
+
+            //Run weather alert feature
+            alertCronJobs(finalIpAddress);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -151,4 +116,32 @@ public class AppStartSetup implements Runnable {
 
     }
 
+    //Flicker the light (currently only 5 times for testing purposes) if weather alerts exist
+    private void alertCronJobs(InetAddress location) {
+
+        try {
+            //Create a tcp socket for data transfer
+            Socket tcpSocket = new Socket(location, 55443);
+
+            //Transfer the Data using the socket to the light bulb
+            DataOutputStream out = new DataOutputStream(tcpSocket.getOutputStream());
+
+            int count = 0;
+            while(count < 5) {
+
+                Thread.sleep(10000);
+                out.writeBytes("{\"id\":1,\"method\":\"start_cf\",\"params\":[3, 0, \"750, 2, 6500, 100, 750, 2, 2700, 100, 750, 2, 4000, 100\"]}\r\n");
+
+                count++;
+            }
+
+            tcpSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error @ lightbulb function");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
 }
