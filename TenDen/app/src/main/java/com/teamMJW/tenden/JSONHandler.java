@@ -56,27 +56,27 @@ public class JSONHandler {
                 json = stringBuilder.toString();
             }
         } catch (FileNotFoundException e) {
-            Log.e(LOG, fileName + " doesn't exist");
+            Log.e(LOG, "Can't read " + fileName + " doesn't exist");
             e.printStackTrace();
             JSONObject modeObject = new JSONObject();
             JSONArray modeArray = new JSONArray();
             JSONObject top = new JSONObject();
-            try {
-                FileOutputStream file = context.openFileOutput(fileName, Context.MODE_PRIVATE);
-                modeObject.put("name", "1st Mode");
-                modeObject.put("brightness", 1234);
-                modeObject.put("temperature", 5678);
-                modeArray.put(modeObject);
-                top.put("modes", modeArray);
-                file.write(top.toString().getBytes());
-                Log.d(LOG, "successfully wrote " + fileName);
-            } catch (JSONException e1) {
-                e.printStackTrace();
-            } catch (FileNotFoundException e1) {
-                e1.printStackTrace();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+//            try {
+//                FileOutputStream file = context.openFileOutput(fileName, Context.MODE_PRIVATE);
+//                modeObject.put("name", "1st Mode");
+//                modeObject.put("brightness", 1234);
+//                modeObject.put("temperature", 5678);
+//                modeArray.put(modeObject);
+//                top.put("modes", modeArray);
+//                file.write(top.toString().getBytes());
+//                Log.d(LOG, "successfully wrote " + fileName);
+//            } catch (JSONException e1) {
+//                e.printStackTrace();
+//            } catch (FileNotFoundException e1) {
+//                e1.printStackTrace();
+//            } catch (IOException e1) {
+//                e1.printStackTrace();
+//            }
         } catch (IOException e) {
             Log.e(LOG, "Can't read file: " + fileName);
             e.printStackTrace();
@@ -112,19 +112,23 @@ public class JSONHandler {
                 json = stringBuilder.toString();
             }
         } catch (FileNotFoundException e) {
-            Log.e(LOG, fileName + " doesn't exist");
-            e.printStackTrace();
+            Log.e(LOG, fileName + " doesn't exist yet");
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         //write to file after grabbing existing JSON
         try {
+            JSONArray modeArray;
             JSONObject modeObject = new JSONObject();
             JSONObject top = new JSONObject();
-            JSONObject original = new JSONObject(json);
-            JSONArray modeArray = original.getJSONArray("modes");
-
+            if(!json.isEmpty()) {
+                JSONObject original = new JSONObject(json);
+                modeArray = original.getJSONArray("modes");
+            }
+            else {
+                modeArray = new JSONArray();
+            }
             FileOutputStream file = context.openFileOutput(fileName, Context.MODE_PRIVATE);
             modeObject.put("name", modeName );
             modeObject.put("brightness", brightness);

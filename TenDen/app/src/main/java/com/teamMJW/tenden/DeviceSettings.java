@@ -14,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,10 +33,13 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.webkit.ConsoleMessage.MessageLevel.LOG;
+
 public class DeviceSettings extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     static final int EDIT_MODE_REQUEST = 1;  // The request code
+    static final int NEW_MODE_REQUEST = 2;  // The request code
 
     protected DrawerLayout drawer;
 
@@ -45,6 +49,12 @@ public class DeviceSettings extends AppCompatActivity
     Button button2;
     ScrollView scrollview1;
     ScrollView scrollview2;
+
+    TextView empty_text;
+
+    ModeListAdapter adapter;
+    ArrayList<Mode> modes;
+
 
     //Initialize the starting state of the Device Settings Page
     @Override
@@ -72,12 +82,14 @@ public class DeviceSettings extends AppCompatActivity
             }
         });
 
-        String[] modeListTest = {"All 1", "Mode 2", "Mode 3"};
-
         JSONHandler json = new JSONHandler(this);
 
-        ArrayList<Mode> modes = json.getModeArrayFromJSON(getString(R.string.modes_file));
-        ModeListAdapter adapter = new ModeListAdapter(this, R.layout.device_settings_mode, modes);
+        modes = json.getModeArrayFromJSON(getString(R.string.modes_file));
+        empty_text = (TextView) findViewById(R.id.emptyModes);
+        if(modes.isEmpty()){
+            empty_text.setVisibility(View.VISIBLE);
+        }
+        adapter = new ModeListAdapter(this, R.layout.device_settings_mode, modes);
         modeList.setAdapter(adapter);
 
         //for expandable ListView
@@ -295,8 +307,8 @@ public class DeviceSettings extends AppCompatActivity
                 public void onClick(View v) {
                     //Passing the mode details
                     Intent mode = new Intent(getApplicationContext(), EditMode.class);
-                    mode.putExtra("modeName", "ModeOne");
-                    startActivity(mode);
+                    mode.putExtra("temp", "ModeOne");
+                    startActivityForResult(mode, NEW_MODE_REQUEST);
                 }
             });
     };
@@ -304,12 +316,16 @@ public class DeviceSettings extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Check which request we're responding to
-        if (requestCode == EDIT_MODE_REQUEST) {
+        if (requestCode == NEW_MODE_REQUEST) {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
                 String modeName = data.getExtras().getString("name");
                 int brightness = Integer.parseInt(data.getExtras().getString("brightness"));
                 int temperature = Integer.parseInt(data.getExtras().getString("temperature"));
+                Mode mode = new Mode(modeName, brightness, temperature);
+                modes.add(mode);
+                adapter.notifyDataSetChanged();
+                empty_text.setVisibility(View.GONE);
                 JSONHandler json = new JSONHandler(this);
                 json.writeJSON(getString(R.string.modes_file), modeName, brightness, temperature);
 
