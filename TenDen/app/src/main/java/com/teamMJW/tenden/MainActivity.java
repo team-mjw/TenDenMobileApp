@@ -30,7 +30,12 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     protected DrawerLayout drawer;
+
+    //current state of power button (recent)
     public static String userZipCode;
+
+    //current state of alert button
+    public static boolean alertOn = false;
 
     public static boolean emulatorMode = true;
 

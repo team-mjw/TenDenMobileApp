@@ -14,14 +14,6 @@ public class BulbConnection implements Runnable {
 
     private InetAddress finalIpAddress;
 
-    private String bulbId;
-
-    private String currentPowerStatus;
-
-    private String currentBrightness;
-
-    private String currentColorTemperature;
-
     private String requestFunc;
 
     //constructor --> might need to add additional parameters
@@ -75,11 +67,6 @@ public class BulbConnection implements Runnable {
 
             //temporary variables to extract various information of the light bulb
             String ipAddressString = responseString;
-            String idString = responseString;
-            String powerStatusString = responseString;
-            String brightnessString = responseString;
-            String colorTemperatureString = responseString;
-
             //Close the socket connection
             socket.close();
 
@@ -87,26 +74,6 @@ public class BulbConnection implements Runnable {
             ipAddressString = ipAddressString.substring(ipAddressString.lastIndexOf("//") + 2);
             ipAddressString = ipAddressString.substring(0, ipAddressString.indexOf("\n"));
             ipAddressString = ipAddressString.substring(0, ipAddressString.indexOf(":"));
-
-            //Extract unique bulb id
-            idString = idString.substring(idString.indexOf("id:"));
-            idString = idString.substring(0, idString.indexOf("\n"));
-            bulbId = idString.substring(idString.indexOf(": ") + 2);
-
-            //Extract current power status
-            powerStatusString = powerStatusString.substring(powerStatusString.indexOf("power:"));
-            powerStatusString = powerStatusString.substring(0, powerStatusString.indexOf("\n"));
-            currentPowerStatus = powerStatusString.substring(powerStatusString.indexOf(": ") + 2);
-
-            //Extract current brightness value
-            brightnessString = brightnessString.substring(brightnessString.indexOf("bright:"));
-            brightnessString = brightnessString.substring(0, brightnessString.indexOf("\n"));
-            currentBrightness = brightnessString.substring(brightnessString.indexOf(": ") + 2);
-
-            //Extract current color temperature
-            colorTemperatureString = colorTemperatureString.substring(colorTemperatureString.indexOf("ct:"));
-            colorTemperatureString = colorTemperatureString.substring(0, colorTemperatureString.indexOf("\n"));
-            currentColorTemperature = colorTemperatureString.substring(colorTemperatureString.indexOf(": ") + 2);
 
             //Convert string ip address to InetAddress form
             finalIpAddress = InetAddress.getByName(ipAddressString);
@@ -143,7 +110,7 @@ public class BulbConnection implements Runnable {
             } else if (requestFunc.equals("Alert On")) {
                 out.writeBytes("{\"id\":1,\"method\":\"start_cf\",\"params\":[5, 0, \"500, 2, 2700, 100, 500, 2, 4000, 25, 500, 2, 1500, 100, 500, 2, 4000, 25, 500, 2, 2700, 100\"]}\r\n");
             } else if (requestFunc.equals("Alert Off")) {
-
+                //nothing
             }
 
             tcpSocket.close();
@@ -191,10 +158,6 @@ public class BulbConnection implements Runnable {
 
             //temporary variables to extract various information of the light bulb
             String ipAddressString = responseString;
-            String idString = responseString;
-            String powerStatusString = responseString;
-            String brightnessString = responseString;
-            String colorTemperatureString = responseString;
 
             //Close the socket connection
             socket.close();
@@ -203,26 +166,6 @@ public class BulbConnection implements Runnable {
             ipAddressString = ipAddressString.substring(ipAddressString.lastIndexOf("//") + 2);
             ipAddressString = ipAddressString.substring(0, ipAddressString.indexOf("\n"));
             ipAddressString = ipAddressString.substring(0, ipAddressString.indexOf(":"));
-
-            //Extract unique bulb id
-            idString = idString.substring(idString.indexOf("id:"));
-            idString = idString.substring(0, idString.indexOf("\n"));
-            bulbId = idString.substring(idString.indexOf(": ") + 2);
-
-            //Extract current power status
-            powerStatusString = powerStatusString.substring(powerStatusString.indexOf("power:"));
-            powerStatusString = powerStatusString.substring(0, powerStatusString.indexOf("\n"));
-            currentPowerStatus = powerStatusString.substring(powerStatusString.indexOf(": ") + 2);
-
-            //Extract current brightness value
-            brightnessString = brightnessString.substring(brightnessString.indexOf("bright:"));
-            brightnessString = brightnessString.substring(0, brightnessString.indexOf("\n"));
-            currentBrightness = brightnessString.substring(brightnessString.indexOf(": ") + 2);
-
-            //Extract current color temperature
-            colorTemperatureString = colorTemperatureString.substring(colorTemperatureString.indexOf("ct:"));
-            colorTemperatureString = colorTemperatureString.substring(0, colorTemperatureString.indexOf("\n"));
-            currentColorTemperature = colorTemperatureString.substring(colorTemperatureString.indexOf(": ") + 2);
 
             //Convert string ip address to InetAddress form
             finalIpAddress = InetAddress.getByName(ipAddressString);
