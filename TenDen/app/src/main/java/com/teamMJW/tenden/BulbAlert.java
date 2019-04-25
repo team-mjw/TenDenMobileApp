@@ -14,14 +14,6 @@ public class BulbAlert implements Runnable {
 
     private InetAddress finalIpAddress;
 
-    private String bulbId;
-
-    private String currentPowerStatus;
-
-    private String currentBrightness;
-
-    private String currentColorTemperature;
-
     //function that will be called when BulbAlert object is called
     @Override
     public void run() {
@@ -32,7 +24,7 @@ public class BulbAlert implements Runnable {
     //UDP Connection with the light bulb and run 'flicker' when there is weather alert in the user input zipcode
     private void setupAlertCycle() {
         try {
-            System.out.println("*****Searching for Device*****\n");
+            System.out.println("*****Searching for Device (for BulbAlert)*****\n");
 
             //Convert HTTP request to byte array
             byte[] httpRequest = initialRequestString.getBytes();
@@ -66,10 +58,6 @@ public class BulbAlert implements Runnable {
 
             //temporary variables to extract various information of the light bulb
             String ipAddressString = responseString;
-            String idString = responseString;
-            String powerStatusString = responseString;
-            String brightnessString = responseString;
-            String colorTemperatureString = responseString;
 
             //Close the socket connection
             socket.close();
@@ -79,30 +67,10 @@ public class BulbAlert implements Runnable {
             ipAddressString = ipAddressString.substring(0, ipAddressString.indexOf("\n"));
             ipAddressString = ipAddressString.substring(0, ipAddressString.indexOf(":"));
 
-            //Extract unique bulb id
-            idString = idString.substring(idString.indexOf("id:"));
-            idString = idString.substring(0, idString.indexOf("\n"));
-            bulbId = idString.substring(idString.indexOf(": ") + 2);
-
-            //Extract current power status
-            powerStatusString = powerStatusString.substring(powerStatusString.indexOf("power:"));
-            powerStatusString = powerStatusString.substring(0, powerStatusString.indexOf("\n"));
-            currentPowerStatus = powerStatusString.substring(powerStatusString.indexOf(": ") + 2);
-
-            //Extract current brightness value
-            brightnessString = brightnessString.substring(brightnessString.indexOf("bright:"));
-            brightnessString = brightnessString.substring(0, brightnessString.indexOf("\n"));
-            currentBrightness = brightnessString.substring(brightnessString.indexOf(": ") + 2);
-
-            //Extract current color temperature
-            colorTemperatureString = colorTemperatureString.substring(colorTemperatureString.indexOf("ct:"));
-            colorTemperatureString = colorTemperatureString.substring(0, colorTemperatureString.indexOf("\n"));
-            currentColorTemperature = colorTemperatureString.substring(colorTemperatureString.indexOf(": ") + 2);
-
             //Convert string ip address to InetAddress form
             finalIpAddress = InetAddress.getByName(ipAddressString);
 
-            System.out.println("*****Device Discovered*****\n");
+            System.out.println("*****Device Discovered (for BulbAlert)*****\n");
 
             //Run weather alert feature
             alertCronJobs(finalIpAddress);
@@ -116,9 +84,8 @@ public class BulbAlert implements Runnable {
 
     }
 
-    //Flicker the light (currently only 5 times for testing purposes) if weather alerts exist
+    //Flicker the light if weather alerts exist
     private void alertCronJobs(InetAddress location) {
-
         try {
             //Create a tcp socket for data transfer
             Socket tcpSocket = new Socket(location, 55443);
@@ -126,21 +93,12 @@ public class BulbAlert implements Runnable {
             //Transfer the Data using the socket to the light bulb
             DataOutputStream out = new DataOutputStream(tcpSocket.getOutputStream());
 
-            int count = 0;
-            while(count < 5) {
-
-                Thread.sleep(10000);
-                out.writeBytes("{\"id\":1,\"method\":\"start_cf\",\"params\":[3, 0, \"750, 2, 6500, 100, 750, 2, 2700, 100, 750, 2, 4000, 100\"]}\r\n");
-
-                count++;
-            }
+            out.writeBytes("{\"id\":1,\"method\":\"start_cf\",\"params\":[3, 0, \"750, 2, 6500, 100, 750, 2, 2700, 100, 750, 2, 4000, 100\"]}\r\n");
 
             tcpSocket.close();
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Error @ lightbulb function");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
 
     }

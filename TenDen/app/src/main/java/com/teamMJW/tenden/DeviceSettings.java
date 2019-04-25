@@ -219,7 +219,7 @@ public class DeviceSettings extends AppCompatActivity
         return true;
     }
 
-    //For testing purposes......Go back to the Main Page when "Back" button is clicked
+    //Go back to the Main Page when "Back" button is clicked
     private void goBackToMainPage() {
         Button mainPageButton = (Button) findViewById(R.id.backMainPage);
         mainPageButton.setOnClickListener(new View.OnClickListener() {

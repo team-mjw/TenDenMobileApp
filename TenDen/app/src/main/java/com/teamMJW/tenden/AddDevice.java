@@ -50,6 +50,7 @@ public class AddDevice extends AppCompatActivity {
                         deviceColorTemp.getText().toString(), bulb.getCurrentIP());
                 SharedPreferences p = getSharedPreferences("NEWDATA", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = p.edit();
+                
                 Gson gsonTo = new Gson();
                 String jsonTo = gsonTo.toJson(myBulb);
                 editor.putString("Bulb", jsonTo);
