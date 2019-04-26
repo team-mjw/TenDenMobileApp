@@ -40,7 +40,7 @@ public class AddDevice extends AppCompatActivity {
             public void onClick(View view) {
                 EditText editname = findViewById(R.id.deviceName);
                 String editnameText = editname.getText().toString();
-                SharedPreferences s = getSharedPreferences("APPDATA", Context.MODE_PRIVATE);
+                SharedPreferences s = getSharedPreferences("TEMPDATA", Context.MODE_PRIVATE);
                 Gson gson = new Gson();
 
                 String json = s.getString("Bulb", null);
@@ -48,15 +48,31 @@ public class AddDevice extends AppCompatActivity {
 
                 Device myBulb = new Device(editnameText, deviceid.getText().toString(), devicePower.getText().toString(), deviceBrightness.getText().toString(),
                         deviceColorTemp.getText().toString(), bulb.getCurrentIP());
-                SharedPreferences p = getSharedPreferences("NEWDATA", Context.MODE_PRIVATE);
+                SharedPreferences p = getSharedPreferences("APPDATA", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = p.edit();
                 
                 Gson gsonTo = new Gson();
                 String jsonTo = gsonTo.toJson(myBulb);
-                editor.putString("Bulb", jsonTo);
+                editor.putString(MainActivity.currentDeviceId, jsonTo);
                 editor.apply();
 
-                System.out.println("----------------------------" + p.getAll());
+                //Used for testing (show multiple devices in the device list popup)
+//                try {
+//                    SharedPreferences po = getSharedPreferences("APPDATA", Context.MODE_PRIVATE);
+//                    SharedPreferences.Editor e = po.edit();
+//                    InetAddress i = InetAddress.getByName("239.255.255.250");
+//                    Device b2 = new Device("Basement", "Device ID: 0x005555", "On", "50", "2000", i);
+//                    Gson g = new Gson();
+//                    String j = g.toJson(b2);
+//                    e.putString("TEST1", j);
+//                    e.apply();
+//
+//                    System.out.println("**********************" + po.getAll());
+//                } catch (UnknownHostException e) {
+//                    e.printStackTrace();
+//                }
+
+                System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>" + p.getAll());
                 startActivity(new Intent(AddDevice.this, MainActivity.class));
             }
         });
@@ -84,7 +100,7 @@ public class AddDevice extends AppCompatActivity {
 
         } else {
             //get device id and power status data from SharedPreferences (stores primitive data)
-            SharedPreferences s = getSharedPreferences("APPDATA", Context.MODE_PRIVATE);
+            SharedPreferences s = getSharedPreferences("TEMPDATA", Context.MODE_PRIVATE);
             Gson gson = new Gson();
             String json = s.getString("Bulb", null);
             Device bulb = gson.fromJson(json, Device.class);
