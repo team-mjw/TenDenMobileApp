@@ -38,10 +38,13 @@ public class MainActivity extends AppCompatActivity
     //current state of alert button
     public static boolean alertOn = false;
 
-    public static boolean emulatorMode = false;
+    //set to true when using android studio emulator
+    public static boolean emulatorMode = true;
 
+    //current unique device id
     public static String currentDeviceId;
 
+    //current device is registered?
     public static boolean registeredDevice = false;
 
     //Initialize the starting state of the Main Page
@@ -205,11 +208,12 @@ public class MainActivity extends AppCompatActivity
             deviceArrayList.add("Device #2");
             devices = deviceArrayList.toArray(new String[0]);
         } else {
-            SharedPreferences s = getSharedPreferences("NEWDATA", Context.MODE_PRIVATE);
+            SharedPreferences s = getSharedPreferences("APPDATA", Context.MODE_PRIVATE);
             Gson gson = new Gson();
 
-            String json = s.getString("Bulb", null);
+            String json = s.getString(currentDeviceId, null);
             Device bulb = gson.fromJson(json, Device.class);
+            System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" + s.getAll());
 
             if(bulb == null) {
                 String id = "No Devices";
@@ -220,32 +224,34 @@ public class MainActivity extends AppCompatActivity
                 devices = deviceArrayList.toArray(new String[0]);
 
             } else {
-                String id = bulb.getName();
-
-                //temporary strings in the device list
                 List<String> deviceArrayList = new ArrayList<String>();
-                deviceArrayList.add(id);
+
+                Map<String,?> keys = s.getAll();
+
+                for(Map.Entry<String,?> entry : keys.entrySet()){
+                    String key = entry.getKey();
+                    String json_info = s.getString(key, null);
+                    Device currentBulb = gson.fromJson(json_info, Device.class);
+
+                    String deviceName = currentBulb.getName();
+                    deviceArrayList.add(deviceName);
+
+                    String deviceID = currentBulb.getBulbId();
+                    deviceID = deviceID.substring(deviceID.indexOf(":") + 2);
+                    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                    System.out.println(deviceID);
+                    System.out.println(MainActivity.currentDeviceId);
+                    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+
+                    if(deviceID.compareTo(currentDeviceId) == 0) {
+                        registeredDevice = true;
+                    }
+                }
+
                 devices = deviceArrayList.toArray(new String[0]);
 
             }
 
-            Map<String,?> keys = s.getAll();
-
-            for(Map.Entry<String,?> entry : keys.entrySet()){
-                String key = entry.getKey();
-                String json_info = s.getString(key, null);
-                Device currentBulb = gson.fromJson(json_info, Device.class);
-                String deviceID = currentBulb.getBulbId();
-                deviceID = deviceID.substring(deviceID.indexOf(":") + 2);
-                System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-                System.out.println(deviceID);
-                System.out.println(MainActivity.currentDeviceId);
-                System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-
-                if(deviceID.compareTo(currentDeviceId) == 0) {
-                    registeredDevice = true;
-                }
-            }
         }
 
 
@@ -300,7 +306,7 @@ public class MainActivity extends AppCompatActivity
             deviceName.setText("Device Name");
         } else {
             //get device id and power status data from SharedPreferences (stores primitive data)
-            SharedPreferences s = getSharedPreferences("APPDATA", Context.MODE_PRIVATE);
+            SharedPreferences s = getSharedPreferences("TEMPDATA", Context.MODE_PRIVATE);
             Gson gson = new Gson();
             String json = s.getString("Bulb", null);
             Device bulb = gson.fromJson(json, Device.class);
@@ -328,13 +334,13 @@ public class MainActivity extends AppCompatActivity
             if (id == null) {
                 deviceName.setText("Device Name");
             } else {
-                //get device id and power status data from SharedPreferences (stores primitive data)
-                SharedPreferences sp = getSharedPreferences("NEWDATA", Context.MODE_PRIVATE);
+                //get device id and power status data from SharedPreferences
+                SharedPreferences sp = getSharedPreferences("APPDATA", Context.MODE_PRIVATE);
                 Gson gson_name = new Gson();
-                String json_name = sp.getString("Bulb", null);
+                String json_name = sp.getString(currentDeviceId, null);
                 Device bulb_name = gson_name.fromJson(json_name, Device.class);
 
-
+                //set the device name to default name if not registered
                 if(bulb_name == null) {
                     deviceName.setText("Non-Registered Device");
                     deviceName.setTextSize(20);

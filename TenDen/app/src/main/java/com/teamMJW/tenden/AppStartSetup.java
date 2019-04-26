@@ -38,22 +38,17 @@ public class AppStartSetup implements Runnable {
     public void run() {
         bulbConnect();
 
-        if(MainActivity.emulatorMode) {
-
-
-        } else {
+        if(!MainActivity.emulatorMode) {
             Device myBulb = new Device("", bulbId, currentPowerStatus, currentBrightness, currentColorTemperature, finalIpAddress);
 
             MainActivity.currentDeviceId = bulbId.substring(bulbId.indexOf(":") + 1);
 
-            SharedPreferences p = context.getSharedPreferences("APPDATA", Context.MODE_PRIVATE);
+            SharedPreferences p = context.getSharedPreferences("TEMPDATA", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = p.edit();
             Gson gson = new Gson();
             String json = gson.toJson(myBulb);
             editor.putString("Bulb", json);
             editor.apply();
-
-            System.out.println("++++++++" + bulbId);
         }
 
     }

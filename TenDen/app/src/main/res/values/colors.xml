@@ -10,4 +10,6 @@
     <color name="powerOnColor">#65bb64</color>
     <color name="powerOffColor">#d9534f</color>
     <color name="white">#FFFFFF</color>
+
+    <!--<color name="pageHeader">#0f52ba</color>-->
 </resources>

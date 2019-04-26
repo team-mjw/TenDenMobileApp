@@ -5,16 +5,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,17 +21,10 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.w3c.dom.Text;
-
 import com.google.gson.Gson;
-
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import static android.webkit.ConsoleMessage.MessageLevel.LOG;
 
 public class DeviceSettings extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -254,10 +244,10 @@ public class DeviceSettings extends AppCompatActivity
             deviceArrayList.add("Device #2");
             devices = deviceArrayList.toArray(new String[0]);
         } else {
-            SharedPreferences s = getSharedPreferences("NEWDATA", Context.MODE_PRIVATE);
+            SharedPreferences s = getSharedPreferences("APPDATA", Context.MODE_PRIVATE);
             Gson gson = new Gson();
 
-            String json = s.getString("Bulb", null);
+            String json = s.getString(MainActivity.currentDeviceId, null);
             Device bulb = gson.fromJson(json, Device.class);
 
             if(bulb == null) {
@@ -269,15 +259,7 @@ public class DeviceSettings extends AppCompatActivity
                 devices = deviceArrayList.toArray(new String[0]);
 
             } else {
-                String id = bulb.getName();
-
-                //temporary strings in the device list
                 List<String> deviceArrayList = new ArrayList<String>();
-                deviceArrayList.add(id);
-                devices = deviceArrayList.toArray(new String[0]);
-
-                //testing
-                List<String> list = new ArrayList<String>();
 
                 Map<String,?> keys = s.getAll();
 
@@ -285,6 +267,10 @@ public class DeviceSettings extends AppCompatActivity
                     String key = entry.getKey();
                     String json_info = s.getString(key, null);
                     Device currentBulb = gson.fromJson(json_info, Device.class);
+
+                    String deviceName = currentBulb.getName();
+                    deviceArrayList.add(deviceName);
+
                     String deviceID = currentBulb.getBulbId();
                     deviceID = deviceID.substring(deviceID.indexOf(":") + 2);
                     System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
@@ -296,6 +282,8 @@ public class DeviceSettings extends AppCompatActivity
                         MainActivity.registeredDevice = true;
                     }
                 }
+
+                devices = deviceArrayList.toArray(new String[0]);
 
 
             }
