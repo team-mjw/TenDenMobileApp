@@ -32,6 +32,7 @@ import com.google.gson.Gson;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static android.webkit.ConsoleMessage.MessageLevel.LOG;
 
@@ -186,7 +187,7 @@ public class DeviceSettings extends AppCompatActivity
                 //set the title
                 builder.setTitle("Hold up!");
                 //set the app description
-                builder.setMessage("Please Enter a ZipCode in Create Mode Page");
+                builder.setMessage("Please Enter a Zip Code in the New Mode Page");
                 //show the alert dialog
                 builder.show();
             } else {
@@ -275,13 +276,38 @@ public class DeviceSettings extends AppCompatActivity
                 deviceArrayList.add(id);
                 devices = deviceArrayList.toArray(new String[0]);
 
+                //testing
+                List<String> list = new ArrayList<String>();
+
+                Map<String,?> keys = s.getAll();
+
+                for(Map.Entry<String,?> entry : keys.entrySet()){
+                    String key = entry.getKey();
+                    String json_info = s.getString(key, null);
+                    Device currentBulb = gson.fromJson(json_info, Device.class);
+                    String deviceID = currentBulb.getBulbId();
+                    deviceID = deviceID.substring(deviceID.indexOf(":") + 2);
+                    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                    System.out.println(deviceID);
+                    System.out.println(MainActivity.currentDeviceId);
+                    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+
+                    if(deviceID.compareTo(MainActivity.currentDeviceId) == 0) {
+                        MainActivity.registeredDevice = true;
+                    }
+                }
+
+
             }
+
         }
 
         //create an alert dialog for device list
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         //set the title
         builder.setTitle("Current Registered Devices");
+        builder.setIcon(R.drawable.ic_list);
+
         //set the contents of the devices
         builder.setItems(devices, null);
         //add a "Add Device" button, which will redirect to the AddDevice page
@@ -292,8 +318,15 @@ public class DeviceSettings extends AppCompatActivity
                 startActivity(goToAddDevicePage);
             }
         });
+
         //show the alert dialog
-        builder.show();
+        AlertDialog dialog = builder.show();
+
+        if(MainActivity.registeredDevice) {
+            //must come after dialog.show()
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setText("Device Already Registered!");
+        }
     }
 
     //Code to go to EditMode Page

@@ -26,8 +26,6 @@ public class AppStartSetup implements Runnable {
 
     private String currentColorTemperature;
 
-    private String requestFunc;
-
     private Context context;
 
 
@@ -45,6 +43,8 @@ public class AppStartSetup implements Runnable {
 
         } else {
             Device myBulb = new Device("", bulbId, currentPowerStatus, currentBrightness, currentColorTemperature, finalIpAddress);
+
+            MainActivity.currentDeviceId = bulbId.substring(bulbId.indexOf(":") + 1);
 
             SharedPreferences p = context.getSharedPreferences("APPDATA", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = p.edit();

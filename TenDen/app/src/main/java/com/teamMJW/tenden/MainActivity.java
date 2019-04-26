@@ -24,6 +24,7 @@ import android.app.AlertDialog;
 import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity
@@ -37,7 +38,11 @@ public class MainActivity extends AppCompatActivity
     //current state of alert button
     public static boolean alertOn = false;
 
-    public static boolean emulatorMode = true;
+    public static boolean emulatorMode = false;
+
+    public static String currentDeviceId;
+
+    public static boolean registeredDevice = false;
 
     //Initialize the starting state of the Main Page
     @Override
@@ -223,6 +228,24 @@ public class MainActivity extends AppCompatActivity
                 devices = deviceArrayList.toArray(new String[0]);
 
             }
+
+            Map<String,?> keys = s.getAll();
+
+            for(Map.Entry<String,?> entry : keys.entrySet()){
+                String key = entry.getKey();
+                String json_info = s.getString(key, null);
+                Device currentBulb = gson.fromJson(json_info, Device.class);
+                String deviceID = currentBulb.getBulbId();
+                deviceID = deviceID.substring(deviceID.indexOf(":") + 2);
+                System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                System.out.println(deviceID);
+                System.out.println(MainActivity.currentDeviceId);
+                System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+
+                if(deviceID.compareTo(currentDeviceId) == 0) {
+                    registeredDevice = true;
+                }
+            }
         }
 
 
@@ -232,6 +255,7 @@ public class MainActivity extends AppCompatActivity
         builder.setTitle("Current Registered Devices");
         //set the contents of the devices
         builder.setItems(devices, null);
+        builder.setIcon(R.drawable.ic_list);
 
         //add a "Add Device" button, which will redirect to the AddDevice page
         builder.setPositiveButton("Add Device", new DialogInterface.OnClickListener() {
@@ -243,7 +267,15 @@ public class MainActivity extends AppCompatActivity
         });
 
         //show the alert dialog
-        builder.show();
+        AlertDialog dialog = builder.show();
+
+        if(registeredDevice) {
+            //must come after dialog.show()
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setText("Device Already Registered!");
+        }
+
+
     }
 
     //set the device name and power switch button to the correct state when app starts
