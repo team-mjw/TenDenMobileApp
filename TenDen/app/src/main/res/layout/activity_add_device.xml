@@ -182,6 +182,7 @@
         android:textSize="15sp"
         android:typeface="sans"
         android:visibility="visible"
+        android:maxLength="20"
         app:fontFamily="monospace"
         app:layout_constraintBottom_toTopOf="@+id/device_details"
         app:layout_constraintEnd_toEndOf="parent"

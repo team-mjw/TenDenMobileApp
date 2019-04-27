@@ -22,10 +22,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.app.AlertDialog;
 import com.google.gson.Gson;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -74,6 +81,21 @@ public class MainActivity extends AppCompatActivity
 
         //Set the switch button to correct state
         setStartState();
+
+//        showCurrentWeather();
+
+//        displayWeekWeather();
+
+    }
+
+    protected void onResume() {
+
+        System.out.println(">>>>>>>>>>>>>>" + userZipCode);
+
+        showCurrentWeather();
+
+        super.onResume();
+
 
     }
 
@@ -142,7 +164,6 @@ public class MainActivity extends AppCompatActivity
                     bulbImage.setImageResource(R.drawable.onlightbulb);
 
                     new Thread(new BulbConnection(toastText)).start();
-
 
                 } else {
                     toastText = powerSwitch.getTextOff().toString();
@@ -256,7 +277,7 @@ public class MainActivity extends AppCompatActivity
 
 
         //create an alert dialog for device list
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogTheme);
         //set the title
         builder.setTitle("Current Registered Devices");
         //set the contents of the devices
@@ -343,12 +364,116 @@ public class MainActivity extends AppCompatActivity
                 //set the device name to default name if not registered
                 if(bulb_name == null) {
                     deviceName.setText("Non-Registered Device");
-                    deviceName.setTextSize(20);
+                    deviceName.setTextSize(25);
                 } else {
                     deviceName.setText(bulb_name.getName());
-                    deviceName.setTextSize(20);
+                    deviceName.setTextSize(30);
                 }
             }
         }
     }
+
+    public void showCurrentWeather() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //holder for HTML code of weather alert website
+                final StringBuilder builder = new StringBuilder();
+
+                if(userZipCode == null) {
+                    TextView tempDisplay = findViewById(R.id.currTemp);
+                    ImageView condPic = findViewById(R.id.currCond);
+
+                    tempDisplay.setVisibility(View.INVISIBLE);
+                    condPic.setVisibility(View.INVISIBLE);
+
+                } else {
+                    //Fetch weather alert information from a specific zipcode
+                    String url = "https://www.weatherusa.net/forecasts/zip:" + userZipCode;
+
+                    Document doc = null;
+                    try {
+                        doc = Jsoup.connect(url).get();
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    String content = doc.body().html();
+                    content = content.replaceAll("\\s+", "");
+                    builder.append(content);
+                    final Pattern pattern = Pattern.compile("<divclass=\"temperature\">(.*?)</div><divclass=\"wx-description\">(.*?)</div>", Pattern.MULTILINE);
+                    final Matcher matcher = pattern.matcher(content);
+
+                    String temp = "Checking....";
+                    String condition = "Checking....";
+
+                    while (matcher.find()) {
+                        System.out.println("Current Temperature: " + matcher.group(1));
+                        temp = matcher.group(1);
+                        System.out.println("Current Condition: " + matcher.group(2));
+                        condition = matcher.group(2);
+                    }
+
+                    final String finalTemperature = temp;
+                    final String finalCondition = condition;
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            TextView tempDisplay = findViewById(R.id.currTemp);
+                            ImageView condPic = findViewById(R.id.currCond);
+
+                            tempDisplay.setVisibility(View.VISIBLE);
+                            condPic.setVisibility(View.VISIBLE);
+
+                            tempDisplay.setText(finalTemperature);
+
+                            if ((finalCondition.compareToIgnoreCase("Sunny") == 0) || (finalCondition.compareToIgnoreCase("Clear") == 0)) {
+                                condPic.setImageResource(R.drawable.sunny);
+                            } else if (finalCondition.contains("Cloudy")) {
+                                condPic.setImageResource(R.drawable.partly);
+                            } else if (finalCondition.contains("Rain")) {
+                                condPic.setImageResource(R.drawable.rainy);
+                            } else if (finalCondition.contains("T-Storms")) {
+                                condPic.setImageResource(R.drawable.thunder);
+                            } else if (finalCondition.contains("Snow")) {
+                                condPic.setImageResource(R.drawable.snowy);
+                            } else {
+                                condPic.setVisibility(View.INVISIBLE);
+                            }
+                        }
+                    });
+                }
+            }
+        }).start();
+
+    }
+
+//    void displayWeekWeather() {
+//        ImageView test = findViewById(R.id.currCond);
+//        test.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                String days[] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+//                //create an alert dialog for device list
+//                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+//                //set the title
+//                builder.setTitle("Weather Forecast");
+//                //set the contents of the devices
+//                builder.setItems(days, null);
+//
+//                //show the alert dialog
+//                AlertDialog dialog = builder.show();
+//
+//                if(registeredDevice) {
+//                    //must come after dialog.show()
+//                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+//                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setText("Device Already Registered!");
+//                }
+//            }
+//        });
+//
+//    }
 }

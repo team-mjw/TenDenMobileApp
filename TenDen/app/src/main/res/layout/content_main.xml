@@ -20,7 +20,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:text="@string/device_1"
-        android:textColor="?attr/colorBackgroundFloating"
+        android:textColor="@android:color/black"
         android:textSize="40sp"
         android:textStyle="bold"
         android:typeface="sans"
@@ -38,7 +38,7 @@
         android:layout_height="327dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="140dp"
+        android:layout_marginTop="132dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:contentDescription="@string/todo"
@@ -62,7 +62,7 @@
         android:soundEffectsEnabled="false"
         android:switchMinWidth="@dimen/activity_horizontal_margin"
         android:text="@string/status"
-        android:textColor="@android:color/background_light"
+        android:textColor="@android:color/black"
         android:textColorLink="@color/accentColor"
         android:textOff="Power Off"
         android:textOn="Power On"
@@ -99,5 +99,33 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/powerSwitch"
         app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/currTemp"
+        android:layout_width="126dp"
+        android:layout_height="67dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:text="TextView"
+        android:textColor="@android:color/black"
+        android:textSize="50sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/currCond"
+        app:layout_constraintEnd_toEndOf="@+id/bulbPicture"
+        app:layout_constraintStart_toStartOf="@+id/bulbPicture"
+        app:layout_constraintTop_toTopOf="@+id/bulbPicture"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageView
+        android:id="@+id/currCond"
+        android:layout_width="117dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="120dp"
+        app:layout_constraintBottom_toBottomOf="@+id/bulbPicture"
+        app:layout_constraintEnd_toEndOf="@+id/bulbPicture"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="@+id/bulbPicture"
+        app:srcCompat="@drawable/loading" />
 
 </android.support.constraint.ConstraintLayout>
