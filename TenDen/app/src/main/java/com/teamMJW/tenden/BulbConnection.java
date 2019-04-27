@@ -111,6 +111,10 @@ public class BulbConnection implements Runnable {
                 out.writeBytes("{\"id\":1,\"method\":\"start_cf\",\"params\":[5, 0, \"500, 2, 2700, 100, 500, 2, 4000, 25, 500, 2, 1500, 100, 500, 2, 4000, 25, 500, 2, 2700, 100\"]}\r\n");
             } else if (requestFunc.equals("Alert Off")) {
                 //nothing
+            } else if(requestFunc.equals("Set Name")) {
+                out.writeBytes("{\"id\": 1, \"method\": \"set_name\", \"params\":[\"" + MainActivity.userZipCode + "\"]}\r\n");
+            } else if(requestFunc.equals("Reset")) {
+                out.writeBytes("{\"id\": 1, \"method\": \"set_name\", \"params\":[\"\"]}\r\n");
             }
 
             tcpSocket.close();

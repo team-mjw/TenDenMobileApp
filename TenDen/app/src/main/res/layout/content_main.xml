@@ -107,7 +107,6 @@
         android:layout_marginTop="32dp"
         android:layout_marginBottom="8dp"
         android:gravity="center"
-        android:text="TextView"
         android:textColor="@android:color/black"
         android:textSize="50sp"
         android:textStyle="bold"
@@ -125,7 +124,6 @@
         app:layout_constraintBottom_toBottomOf="@+id/bulbPicture"
         app:layout_constraintEnd_toEndOf="@+id/bulbPicture"
         app:layout_constraintHorizontal_bias="0.492"
-        app:layout_constraintStart_toStartOf="@+id/bulbPicture"
-        app:srcCompat="@drawable/loading" />
+        app:layout_constraintStart_toStartOf="@+id/bulbPicture" />
 
 </android.support.constraint.ConstraintLayout>

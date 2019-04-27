@@ -40,6 +40,8 @@ public class EditMode extends AppCompatActivity implements AsyncResponse {
     WeatherFeed feed = new WeatherFeed(this);
     TempBulbChange bulb = new TempBulbChange();
 
+    private String userInputZipCode = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,7 +76,7 @@ public class EditMode extends AppCompatActivity implements AsyncResponse {
                 //testing. Sticking the weather into modeName for now
                 EditText zipcode = (EditText) findViewById(R.id.zipcode);
                 if(!TextUtils.isEmpty(zipcode.getText())) {
-                    MainActivity.userZipCode = zipcode.getText().toString();
+                    userInputZipCode = zipcode.getText().toString();
                     feed.getWeather(Integer.parseInt(zipcode.getText().toString()));
                 }
             }
@@ -86,6 +88,10 @@ public class EditMode extends AppCompatActivity implements AsyncResponse {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                MainActivity.userZipCode = userInputZipCode;
+                //set the zip code as the name of the bulb (to save data on the light bulb everytime connection happens)
+                new Thread(new BulbConnection("Set Name")).start();
+
                 //Grab all fields and send data back to device settings page
                 EditText name = (EditText) findViewById(R.id.modeName);
                 EditText brightness = (EditText) findViewById(R.id.edit_brightness);

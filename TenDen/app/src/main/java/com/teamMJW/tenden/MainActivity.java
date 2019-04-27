@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity
     public static boolean alertOn = false;
 
     //set to true when using android studio emulator
-    public static boolean emulatorMode = true;
+    public static boolean emulatorMode = false;
 
     //current unique device id
     public static String currentDeviceId;
@@ -82,7 +82,11 @@ public class MainActivity extends AppCompatActivity
         //Set the switch button to correct state
         setStartState();
 
-//        showCurrentWeather();
+        if(AppStartSetup.currentName.compareToIgnoreCase("") != 0) {
+            userZipCode = AppStartSetup.currentName;
+        } else {
+            userZipCode = null;
+        }
 
 //        displayWeekWeather();
 
@@ -92,7 +96,9 @@ public class MainActivity extends AppCompatActivity
 
         System.out.println(">>>>>>>>>>>>>>" + userZipCode);
 
-        showCurrentWeather();
+        if(userZipCode != null) {
+            showCurrentWeather();
+        }
 
         super.onResume();
 
@@ -364,6 +370,8 @@ public class MainActivity extends AppCompatActivity
                 //set the device name to default name if not registered
                 if(bulb_name == null) {
                     deviceName.setText("Non-Registered Device");
+                    System.out.println("***********RESET**********");
+                    new Thread(new BulbConnection("Reset")).start();
                     deviceName.setTextSize(25);
                 } else {
                     deviceName.setText(bulb_name.getName());
@@ -380,6 +388,7 @@ public class MainActivity extends AppCompatActivity
                 //holder for HTML code of weather alert website
                 final StringBuilder builder = new StringBuilder();
 
+                System.out.println("***********showCurrentWeather()**********");
                 if(userZipCode == null) {
                     TextView tempDisplay = findViewById(R.id.currTemp);
                     ImageView condPic = findViewById(R.id.currCond);
@@ -399,15 +408,14 @@ public class MainActivity extends AppCompatActivity
                         e.printStackTrace();
                     }
 
-
                     String content = doc.body().html();
                     content = content.replaceAll("\\s+", "");
                     builder.append(content);
                     final Pattern pattern = Pattern.compile("<divclass=\"temperature\">(.*?)</div><divclass=\"wx-description\">(.*?)</div>", Pattern.MULTILINE);
                     final Matcher matcher = pattern.matcher(content);
 
-                    String temp = "Checking....";
-                    String condition = "Checking....";
+                    String temp = "";
+                    String condition = "";
 
                     while (matcher.find()) {
                         System.out.println("Current Temperature: " + matcher.group(1));
