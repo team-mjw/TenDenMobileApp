@@ -273,10 +273,6 @@ public class DeviceSettings extends AppCompatActivity
 
                     String deviceID = currentBulb.getBulbId();
                     deviceID = deviceID.substring(deviceID.indexOf(":") + 2);
-                    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-                    System.out.println(deviceID);
-                    System.out.println(MainActivity.currentDeviceId);
-                    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
                     if(deviceID.compareTo(MainActivity.currentDeviceId) == 0) {
                         MainActivity.registeredDevice = true;

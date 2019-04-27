@@ -28,6 +28,8 @@ public class AppStartSetup implements Runnable {
 
     private Context context;
 
+    public static String currentName;
+
 
     public AppStartSetup(Activity context) {
         this.context = context;
@@ -99,6 +101,7 @@ public class AppStartSetup implements Runnable {
             String powerStatusString = responseString;
             String brightnessString = responseString;
             String colorTemperatureString = responseString;
+            String nameString = responseString;
 
             //Close the socket connection
             socket.close();
@@ -131,6 +134,13 @@ public class AppStartSetup implements Runnable {
             colorTemperatureString = colorTemperatureString.substring(0, colorTemperatureString.indexOf("\n"));
             currentColorTemperature = colorTemperatureString.substring(colorTemperatureString.indexOf(": ") + 2);
             currentColorTemperature = currentColorTemperature.replaceAll("\\s+", "");
+
+            //Extract name of light bulb
+            nameString = nameString.substring(nameString.indexOf("name:"));
+            nameString = nameString.substring(0, nameString.indexOf("\n"));
+            currentName = nameString.substring(colorTemperatureString.indexOf(": ") + 2);
+            currentName = currentName.replaceAll("\\s+", "");
+            currentName = currentName.replace(":", "");
 
             //Convert string ip address to InetAddress form
             finalIpAddress = InetAddress.getByName(ipAddressString);
