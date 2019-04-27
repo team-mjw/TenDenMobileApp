@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity
     public static boolean alertOn = false;
 
     //set to true when using android studio emulator
-    public static boolean emulatorMode = false;
+    public static boolean emulatorMode = true;
 
     //current unique device id
     public static String currentDeviceId;
