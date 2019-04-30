@@ -326,7 +326,7 @@ public class DeviceSettings extends AppCompatActivity
                 public void onClick(View v) {
                     //Passing the mode details
                     Intent mode = new Intent(getApplicationContext(), EditMode.class);
-                    mode.putExtra("temp", "ModeOne");
+                    mode.putExtra("requestCode", NEW_MODE_REQUEST);
                     startActivityForResult(mode, NEW_MODE_REQUEST);
                 }
             });

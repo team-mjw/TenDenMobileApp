@@ -42,6 +42,7 @@ public class EditMode extends AppCompatActivity implements AsyncResponse {
 
     private String userInputZipCode = "";
     public static final int RESULT_DELETE = 1;
+    static final int NEW_MODE_REQUEST = 2;  // The request code
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,22 +88,27 @@ public class EditMode extends AppCompatActivity implements AsyncResponse {
 
     private void deleteBtn() {
         Button deleteBtn = (Button) findViewById(R.id.deleteButton);
-        deleteBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MainActivity.userZipCode = userInputZipCode;
-                //set the zip code as the name of the bulb (to save data on the light bulb everytime connection happens)
-                new Thread(new BulbConnection("Set Name")).start();
+        if(getIntent().getExtras().getInt("requestCode") == NEW_MODE_REQUEST) {
+            deleteBtn.setClickable(false);
+        }
+        else {
+            deleteBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    MainActivity.userZipCode = userInputZipCode;
+                    //set the zip code as the name of the bulb (to save data on the light bulb everytime connection happens)
+                    new Thread(new BulbConnection("Set Name")).start();
 
-                //Grab all fields and send data back to device settings page
-                Intent resultIntent = new Intent();
-                if(getIntent().hasExtra("position")) {
-                    resultIntent.putExtra("position", getIntent().getExtras().getInt("position"));
+                    //Grab all fields and send data back to device settings page
+                    Intent resultIntent = new Intent();
+                    if (getIntent().hasExtra("position")) {
+                        resultIntent.putExtra("position", getIntent().getExtras().getInt("position"));
+                    }
+                    setResult(RESULT_DELETE, resultIntent);
+                    finish();
                 }
-                setResult(RESULT_DELETE, resultIntent);
-                finish();
-            }
-    });
+            });
+        }
     }
 
     private void saveBtn() {
