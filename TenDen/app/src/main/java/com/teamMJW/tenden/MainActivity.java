@@ -82,10 +82,12 @@ public class MainActivity extends AppCompatActivity
         //Set the switch button to correct state
         setStartState();
 
-        if(AppStartSetup.currentName.compareToIgnoreCase("") != 0) {
-            userZipCode = AppStartSetup.currentName;
-        } else {
-            userZipCode = null;
+        if(AppStartSetup.currentName != null) {
+            if(AppStartSetup.currentName.compareToIgnoreCase("") != 0) {
+                userZipCode = AppStartSetup.currentName;
+            } else {
+                userZipCode = null;
+            }
         }
 
 //        displayWeekWeather();

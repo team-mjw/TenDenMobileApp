@@ -32,32 +32,54 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.003" />
 
-    <Button
-        android:id="@+id/saveButton"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="77dp"
-        android:layout_height="43dp"
-        android:layout_marginStart="120dp"
-        android:layout_marginLeft="120dp"
-        android:layout_marginTop="28dp"
-        android:background="@color/saveButtonColor"
-        android:text="Save"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/textView3"
+        android:layout_marginBottom="5dp">
 
-    <Button
-        android:id="@+id/cancelButton"
-        android:layout_width="74dp"
-        android:layout_height="43dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="88dp"
-        android:layout_marginRight="88dp"
-        android:background="@android:color/holo_red_dark"
-        android:text="Cancel"
-        android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button.Colored"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        <Button
+            android:id="@+id/saveButton"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="77dp"
+            android:layout_height="43dp"
+            android:layout_marginStart="85dp"
+            android:layout_marginLeft="85dp"
+            android:layout_marginTop="28dp"
+            android:background="@color/saveButtonColor"
+            android:text="Save"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
+        <Button
+            android:id="@+id/deleteButton"
+            android:layout_width="74dp"
+            android:layout_height="43dp"
+            android:layout_marginTop="80dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@android:color/holo_red_dark"
+            android:text="Delete Mode"
+            android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button.Colored"
+            app:layout_constraintLeft_toLeftOf="@id/saveButton"
+            app:layout_constraintTop_toBottomOf="@+id/saveButton" />
+
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_width="74dp"
+            android:layout_height="43dp"
+            android:layout_marginTop="28dp"
+            android:layout_marginEnd="88dp"
+            android:layout_marginRight="88dp"
+            android:layout_marginBottom="90dp"
+            android:background="@android:color/holo_red_dark"
+            android:text="Cancel"
+            android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button.Colored"
+            />
+
+
+
+    </LinearLayout>
     <android.support.design.widget.TextInputLayout
         android:id="@+id/modeNameInputLayout"
         android:layout_width="203dp"

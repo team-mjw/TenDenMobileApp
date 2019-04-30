@@ -41,6 +41,7 @@ public class EditMode extends AppCompatActivity implements AsyncResponse {
     TempBulbChange bulb = new TempBulbChange();
 
     private String userInputZipCode = "";
+    public static final int RESULT_DELETE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +53,7 @@ public class EditMode extends AppCompatActivity implements AsyncResponse {
         fillFields();
         zipBtn();
         saveBtn();
+        deleteBtn();
         cancel();
     }
 
@@ -83,6 +85,26 @@ public class EditMode extends AppCompatActivity implements AsyncResponse {
         });
     }
 
+    private void deleteBtn() {
+        Button deleteBtn = (Button) findViewById(R.id.deleteButton);
+        deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MainActivity.userZipCode = userInputZipCode;
+                //set the zip code as the name of the bulb (to save data on the light bulb everytime connection happens)
+                new Thread(new BulbConnection("Set Name")).start();
+
+                //Grab all fields and send data back to device settings page
+                Intent resultIntent = new Intent();
+                if(getIntent().hasExtra("position")) {
+                    resultIntent.putExtra("position", getIntent().getExtras().getInt("position"));
+                }
+                setResult(RESULT_DELETE, resultIntent);
+                finish();
+            }
+    });
+    }
+
     private void saveBtn() {
         Button saveBtn = (Button) findViewById(R.id.saveButton);
         saveBtn.setOnClickListener(new View.OnClickListener() {
@@ -100,6 +122,9 @@ public class EditMode extends AppCompatActivity implements AsyncResponse {
                 resultIntent.putExtra("name", name.getText().toString());
                 resultIntent.putExtra("brightness", brightness.getText().toString());
                 resultIntent.putExtra("temperature", temperature.getText().toString());
+                if(getIntent().hasExtra("position")) {
+                    resultIntent.putExtra("position", getIntent().getExtras().getInt("position"));
+                }
                 setResult(Activity.RESULT_OK, resultIntent);
                 finish();
             }

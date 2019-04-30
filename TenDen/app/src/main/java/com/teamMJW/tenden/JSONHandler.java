@@ -3,25 +3,19 @@ package com.teamMJW.tenden;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
-import android.renderscript.ScriptGroup;
-import android.support.annotation.RequiresApi;
 import android.util.Log;
-import android.view.View;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.function.IntUnaryOperator;
 
 public class JSONHandler {
     private static final String LOG = "JSON Handler";
@@ -145,7 +139,124 @@ public class JSONHandler {
             e1.printStackTrace();
         }
     }
-        @TargetApi(Build.VERSION_CODES.KITKAT)
+
+    public void updateJSON(String fileName, String modeName, int brightness, int temperature, int position) {
+        String json = "";
+        InputStream inputStream = null;
+        try {
+            inputStream = context.openFileInput(fileName);
+
+            if (inputStream != null) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                StringBuilder stringBuilder = new StringBuilder();
+                String grabString = "";
+                while ((grabString = bufferedReader.readLine()) != null) {
+                    stringBuilder.append(grabString);
+                }
+
+                json = stringBuilder.toString();
+            }
+        } catch (FileNotFoundException e) {
+            Log.e(LOG, fileName + " doesn't exist yet");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //write to file after grabbing existing JSON
+        try {
+            JSONArray modeArray;
+            JSONObject modeObject = new JSONObject();
+            JSONObject top = new JSONObject();
+            JSONArray copyArray = new JSONArray();
+            if(!json.isEmpty()) {
+                JSONObject original = new JSONObject(json);
+                modeArray = original.getJSONArray("modes");
+            }
+            else {
+                modeArray = new JSONArray();
+            }
+            FileOutputStream file = context.openFileOutput(fileName, Context.MODE_PRIVATE);
+            int len = modeArray.length();
+            for(int i = 0; i<len; i++) {
+                if(i != position) {
+                    copyArray.put(modeArray.get(i));
+                }
+                else{
+                    modeObject.put("name", modeName );
+                    modeObject.put("brightness", brightness);
+                    modeObject.put("temperature", temperature);
+                    copyArray.put(modeObject);
+                }
+            }
+            top.put("modes", copyArray);
+            file.write(top.toString().getBytes());
+            Log.d(LOG, "successfully wrote " + fileName);
+        } catch (JSONException e1) {
+            e1.printStackTrace();
+        } catch (FileNotFoundException e1) {
+            e1.printStackTrace();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+    }
+
+    public void deleteJSON(String fileName, int position) {
+        String json = "";
+        InputStream inputStream = null;
+        try {
+            inputStream = context.openFileInput(fileName);
+
+            if (inputStream != null) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                StringBuilder stringBuilder = new StringBuilder();
+                String grabString = "";
+                while ((grabString = bufferedReader.readLine()) != null) {
+                    stringBuilder.append(grabString);
+                }
+
+                json = stringBuilder.toString();
+            }
+        } catch (FileNotFoundException e) {
+            Log.e(LOG, fileName + " doesn't exist yet");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //write to file after grabbing existing JSON
+        try {
+            JSONArray modeArray;
+            JSONObject modeObject = new JSONObject();
+            JSONObject top = new JSONObject();
+            JSONArray copyArray = new JSONArray();
+            if(!json.isEmpty()) {
+                JSONObject original = new JSONObject(json);
+                modeArray = original.getJSONArray("modes");
+            }
+            else {
+                modeArray = new JSONArray();
+            }
+            FileOutputStream file = context.openFileOutput(fileName, Context.MODE_PRIVATE);
+            int len = modeArray.length();
+            for(int i = 0; i<len; i++) {
+                if(i != position) {
+                    copyArray.put(modeArray.get(i));
+                }
+            }
+            top.put("modes", copyArray);
+            file.write(top.toString().getBytes());
+            Log.d(LOG, "successfully wrote " + fileName);
+        } catch (JSONException e1) {
+            e1.printStackTrace();
+        } catch (FileNotFoundException e1) {
+            e1.printStackTrace();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
         public ArrayList<Mode> loadModes (String json){
 
             ArrayList<Mode> modeArrayList = new ArrayList<Mode>();

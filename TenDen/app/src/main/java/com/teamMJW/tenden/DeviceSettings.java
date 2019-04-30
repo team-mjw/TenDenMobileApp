@@ -31,6 +31,7 @@ public class DeviceSettings extends AppCompatActivity
 
     static final int EDIT_MODE_REQUEST = 1;  // The request code
     static final int NEW_MODE_REQUEST = 2;  // The request code
+    public static final int RESULT_DELETE = 1; // for a resulting delete request
 
     protected DrawerLayout drawer;
 
@@ -63,11 +64,12 @@ public class DeviceSettings extends AppCompatActivity
                 TextView name = (TextView) view.findViewById(R.id.device_settings_mode_name);
                 TextView bright = (TextView) view.findViewById(R.id.brightness_value);
                 TextView temp = (TextView) view.findViewById(R.id.temperature_value);
-                Toast.makeText(getApplicationContext(), "Text view "+name.getText().toString() + bright.getText().toString()
+                Toast.makeText(getApplicationContext(), "Text view "+ Integer.toString(position)
                         ,Toast.LENGTH_LONG).show();
                 mode.putExtra("name", name.getText().toString());
                 mode.putExtra("brightness", Integer.parseInt(bright.getText().toString()));
                 mode.putExtra("temperature", Integer.parseInt(temp.getText().toString()));
+                mode.putExtra("position", position);
 
                 startActivityForResult(mode, EDIT_MODE_REQUEST);
             }
@@ -346,6 +348,33 @@ public class DeviceSettings extends AppCompatActivity
                 JSONHandler json = new JSONHandler(this);
                 json.writeJSON(getString(R.string.modes_file), modeName, brightness, temperature);
 
+            }
+        }
+
+        if (requestCode == EDIT_MODE_REQUEST) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                String modeName = data.getExtras().getString("name");
+                int brightness = Integer.parseInt(data.getExtras().getString("brightness"));
+                int temperature = Integer.parseInt(data.getExtras().getString("temperature"));
+                int position = data.getExtras().getInt("position");
+                Mode mode = new Mode(modeName, brightness, temperature);
+                modes.set(position, mode);
+                adapter.notifyDataSetChanged();
+                empty_text.setVisibility(View.GONE);
+                JSONHandler json = new JSONHandler(this);
+                json.updateJSON(getString(R.string.modes_file), modeName, brightness, temperature, position);
+
+            }
+            if (resultCode == RESULT_DELETE) {
+                int position = data.getExtras().getInt("position");
+                modes.remove(position);
+                adapter.notifyDataSetChanged();
+                if(modes.isEmpty()) {
+                    empty_text.setVisibility(View.VISIBLE);
+                }
+                JSONHandler json = new JSONHandler(this);
+                json.deleteJSON(getString(R.string.modes_file), position);
             }
         }
     }
