@@ -124,15 +124,25 @@ public class EditMode extends AppCompatActivity implements AsyncResponse {
                 EditText name = (EditText) findViewById(R.id.modeName);
                 EditText brightness = (EditText) findViewById(R.id.edit_brightness);
                 EditText temperature = (EditText) findViewById(R.id.edit_temperature);
-                Intent resultIntent = new Intent();
-                resultIntent.putExtra("name", name.getText().toString());
-                resultIntent.putExtra("brightness", brightness.getText().toString());
-                resultIntent.putExtra("temperature", temperature.getText().toString());
-                if(getIntent().hasExtra("position")) {
-                    resultIntent.putExtra("position", getIntent().getExtras().getInt("position"));
+                if(Integer.parseInt(brightness.getText().toString()) > 100 || Integer.parseInt(brightness.getText().toString()) < -100) {
+                    Toast.makeText(getApplicationContext(), "Brightness must be between -100 and 100"
+                            ,Toast.LENGTH_LONG).show();
                 }
-                setResult(Activity.RESULT_OK, resultIntent);
-                finish();
+                else if(Integer.parseInt(temperature.getText().toString()) > 4000 || Integer.parseInt(temperature.getText().toString()) < 1700){
+                    Toast.makeText(getApplicationContext(), "Temperature must be between 1700 and 4000"
+                            ,Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra("name", name.getText().toString());
+                    resultIntent.putExtra("brightness", brightness.getText().toString());
+                    resultIntent.putExtra("temperature", temperature.getText().toString());
+                    if (getIntent().hasExtra("position")) {
+                        resultIntent.putExtra("position", getIntent().getExtras().getInt("position"));
+                    }
+                    setResult(Activity.RESULT_OK, resultIntent);
+                    finish();
+                }
             }
         });    }
 

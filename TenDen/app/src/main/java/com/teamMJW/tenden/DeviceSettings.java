@@ -64,8 +64,6 @@ public class DeviceSettings extends AppCompatActivity
                 TextView name = (TextView) view.findViewById(R.id.device_settings_mode_name);
                 TextView bright = (TextView) view.findViewById(R.id.brightness_value);
                 TextView temp = (TextView) view.findViewById(R.id.temperature_value);
-                Toast.makeText(getApplicationContext(), "Text view "+ Integer.toString(position)
-                        ,Toast.LENGTH_LONG).show();
                 mode.putExtra("name", name.getText().toString());
                 mode.putExtra("brightness", Integer.parseInt(bright.getText().toString()));
                 mode.putExtra("temperature", Integer.parseInt(temp.getText().toString()));
